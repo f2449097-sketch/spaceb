@@ -1,0 +1,55 @@
+import React, { useState, useEffect } from 'react';
+import { UPLOADS_URL } from '../config/api';
+
+function Image({
+  src,
+  alt = "Image Name",
+  className = "",
+  fallback = "/assets/images/no_image.png",
+  ...props
+}) {
+  const [imgSrc, setImgSrc] = useState(null);
+  const [error, setError] = useState(false);
+
+  // Process the source URL
+  const processImageUrl = (url) => {
+    if (!url) return fallback;
+    if (url.startsWith("http")) return url;
+    // Handle public folder images (like /images/benz.jpg)
+    if (url.startsWith("/images/") || url.startsWith("/assets/")) return url;
+    // Handle backend uploads
+    if (url.startsWith("/")) return `${UPLOADS_URL}${url}`;
+    return `${UPLOADS_URL}/${url}`;
+  };
+
+  useEffect(() => {
+    setImgSrc(processImageUrl(src));
+    setError(false);
+  }, [src, fallback]);
+
+  const handleError = () => {
+    if (!error) {
+      console.error("Image load error for:", imgSrc);
+      setError(true);
+      setImgSrc(fallback);
+    }
+  };
+
+  return (
+    <img
+      src={imgSrc}
+      alt={alt}
+      className={className}
+      onError={handleError}
+      loading="eager"
+      style={{
+        ...props.style,
+        opacity: error ? 0.9 : 1,
+      }}
+      }}
+      {...props}
+    />
+  );
+}
+
+export default Image;

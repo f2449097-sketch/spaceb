@@ -1,0 +1,10 @@
+# Netlify Redirects Configuration
+# Fallback routing rules (netlify.toml takes precedence)
+
+# API routes - proxy to serverless function
+/api/*  /.netlify/functions/api/:splat  200
+/images/*  /.netlify/functions/api/images/:splat  200
+/uploads/*  /.netlify/functions/api/uploads/:splat  200
+
+# SPA fallback - all other routes to index.html
+/*  /index.html  200
