@@ -64,14 +64,8 @@
     Referrer-Policy = "no-referrer-when-downgrade"
 
 # Environment context-specific settings
-[context.production]
-  environment = { NODE_ENV = "production" }
-
-[context.deploy-preview]
-  environment = { NODE_ENV = "development" }
-
-[context.branch-deploy]
-  environment = { NODE_ENV = "development" }
+# NOTE: NODE_ENV is intentionally NOT set here to allow devDependencies (like Vite) to install
+# The NPM_FLAGS = "--include=dev" in [build.environment] handles this instead
 
 # Functions configuration
 [functions]
