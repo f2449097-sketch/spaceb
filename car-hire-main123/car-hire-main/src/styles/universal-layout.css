@@ -1,0 +1,228 @@
+/* 
+ * UNIVERSAL IDENTICAL LAYOUT - CLEAN VERSION
+ * Forces desktop layout on ALL devices with proper scaling
+ */
+
+/* Base setup for all devices */
+html {
+  width: 100vw !important;
+  overflow-x: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body {
+  width: 100vw !important;
+  min-width: 100vw !important;
+  overflow-x: hidden !important;
+  transform-origin: top left !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+#root {
+  width: 100% !important;
+  min-width: 100% !important;
+}
+
+/* DISABLE ALL RESPONSIVE BEHAVIOR */
+* {
+  /* Force all elements to ignore responsive classes */
+  max-width: none !important;
+}
+
+/* Force desktop layout on smaller screens */
+@media screen and (max-width: 1365px) {
+  /* Make sections fill full width */
+  section, .container, .max-w-6xl, .max-w-5xl, .max-w-4xl {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+  
+  /* OVERRIDE RESPONSIVE CLASSES */
+  .hidden.sm\:block, .hidden.md\:block, .hidden.lg\:block {
+    display: block !important;
+  }
+  
+  .block.sm\:hidden, .block.md\:hidden, .block.lg\:hidden {
+    display: block !important;
+  }
+  
+  .flex.sm\:hidden, .flex.md\:hidden, .flex.lg\:hidden {
+    display: flex !important;
+  }
+  
+  /* Force desktop navigation */
+  .lg\:hidden {
+    display: block !important;
+  }
+  
+  .hidden.lg\:flex {
+    display: flex !important;
+  }
+  
+  /* Force desktop grid layouts */
+  .grid-cols-1.md\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  
+  .grid-cols-1.lg\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+  
+  .grid-cols-1.lg\:grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+  
+  /* Force desktop flex direction */
+  .flex-col.sm\:flex-row {
+    flex-direction: row !important;
+  }
+  
+  .flex-col.md\:flex-row {
+    flex-direction: row !important;
+  }
+  
+  .flex-col.lg\:flex-row {
+    flex-direction: row !important;
+  }
+  
+  /* Force desktop text sizes */
+  .text-lg.sm\:text-xl {
+    font-size: 1.25rem !important;
+    line-height: 1.75rem !important;
+  }
+  
+  .text-xl.sm\:text-2xl {
+    font-size: 1.5rem !important;
+    line-height: 2rem !important;
+  }
+  
+  .text-2xl.sm\:text-3xl {
+    font-size: 1.875rem !important;
+    line-height: 2.25rem !important;
+  }
+  
+  .text-4xl.sm\:text-5xl.lg\:text-6xl {
+    font-size: 3.75rem !important;
+    line-height: 1 !important;
+  }
+  
+  /* Force desktop spacing */
+  .px-6.sm\:px-8 {
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+  }
+  
+  .py-16.sm\:py-20 {
+    padding-top: 5rem !important;
+    padding-bottom: 5rem !important;
+  }
+  
+  .gap-3.sm\:gap-4 {
+    gap: 1rem !important;
+  }
+  
+  .mt-8.sm\:mt-10 {
+    margin-top: 2.5rem !important;
+  }
+  
+  /* Force desktop widths */
+  .w-full.sm\:w-auto {
+    width: auto !important;
+  }
+}
+
+/* Mobile Navigation Enhancements */
+@media screen and (max-width: 1365px) {
+  /* Ensure navigation is touch-friendly */
+  nav a, nav button {
+    min-height: 44px !important;
+    min-width: 44px !important;
+    touch-action: manipulation !important;
+  }
+  
+  /* Make header navigation more accessible on small screens */
+  header nav {
+    gap: 8px !important;
+  }
+  
+  header nav a {
+    padding: 8px 12px !important;
+    font-size: 14px !important;
+    border-radius: 8px !important;
+  }
+  
+  /* Ensure Book Now button is prominent */
+  header nav a[href="/instant-booking-flow"] {
+    background: #ff6f00 !important;
+    color: white !important;
+    font-weight: 600 !important;
+    box-shadow: 0 4px 12px rgba(255, 111, 0, 0.3) !important;
+  }
+  
+  /* Add touch feedback */
+  header nav a:active {
+    transform: scale(0.95) !important;
+    transition: transform 0.1s ease !important;
+  }
+}
+
+/* Extra small screens - ensure navigation is always visible */
+@media screen and (max-width: 480px) {
+  /* Adjust header for very small screens */
+  header .flex.items-center.justify-between {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+  
+  /* Make navigation stack if needed */
+  header nav {
+    order: 3 !important;
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 8px 0 !important;
+    border-top: 1px solid rgba(0,0,0,0.1) !important;
+  }
+  
+  /* Smaller navigation items for very small screens */
+  header nav a {
+    padding: 6px 8px !important;
+    font-size: 12px !important;
+  }
+  
+  header nav a span {
+    display: none !important;
+  }
+  
+  /* Show only icons on very small screens */
+  header nav a svg {
+    margin: 0 !important;
+  }
+}
+
+/* Clean mobile enhancements */
+@media screen and (max-width: 1365px) {
+  /* Ensure proper overflow handling */
+  html, body {
+    overflow-x: hidden !important;
+  }
+}
+
+/* Debug indicator - smaller and less intrusive */
+@media screen and (max-width: 1365px) {
+  body::after {
+    content: calc(100vw / 1366 * 100) "%";
+    position: fixed;
+    top: 0;
+    right: 0;
+    background: rgba(0, 255, 0, 0.7);
+    color: black;
+    padding: 2px 6px;
+    font-size: 10px;
+    font-weight: bold;
+    z-index: 99999;
+    pointer-events: none;
+    border-radius: 0 0 0 4px;
+  }
+}
