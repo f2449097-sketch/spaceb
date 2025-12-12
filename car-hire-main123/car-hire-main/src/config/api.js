@@ -3,10 +3,10 @@
 // - If VITE_BACKEND_URL is provided we use it (useful for production or remote backends).
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3001';
 
-// For Netlify deployment, use relative URLs in production (Netlify redirects handle routing to functions)
-// In development, use proxy to avoid CORS issues
-export const API_BASE_URL = '/api';
-export const UPLOADS_URL = '';
+// For Netlify deployment, use relative URLs in production
+// In development, use full URL to avoid CORS issues
+export const API_BASE_URL = import.meta.env.DEV ? 'http://localhost:3001/api' : '/api';
+export const UPLOADS_URL = import.meta.env.DEV ? 'http://localhost:3001' : '';
 
 // Log the API URLs for debugging
 console.log('Backend URL:', BACKEND_URL);

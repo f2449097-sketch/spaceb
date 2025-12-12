@@ -4,7 +4,12 @@ import Button from '../components/ui/Button';
 import Icon from '../components/AppIcon';
 
 /**
+<<<<<<< HEAD
  * Legacy payment example now updated to reflect offline payments.
+=======
+ * Example implementation of M-Pesa payment integration
+ * This shows how to use the MpesaPayment component in your booking flow
+>>>>>>> 8586a9709f04ebd6c6f810187b28bf6e3e6bbbed
  */
 const PaymentExample = () => {
   const [showPayment, setShowPayment] = useState(false);
@@ -71,10 +76,17 @@ const PaymentExample = () => {
               variant="default"
               fullWidth
               onClick={() => setShowPayment(true)}
+<<<<<<< HEAD
               className="bg-cosmic-depth hover:bg-cosmic-depth/90 text-white py-3 text-lg"
             >
               <Icon name="Phone" className="w-5 h-5 mr-2" />
               Contact Us to Complete Payment
+=======
+              className="bg-green-600 hover:bg-green-700 text-white py-3 text-lg"
+            >
+              <Icon name="Smartphone" className="w-5 h-5 mr-2" />
+              Pay with M-Pesa
+>>>>>>> 8586a9709f04ebd6c6f810187b28bf6e3e6bbbed
             </Button>
           ) : (
             <div className="bg-green-50 border border-green-200 rounded-lg p-4">
@@ -99,11 +111,21 @@ const PaymentExample = () => {
             <div className="flex items-start gap-3">
               <Icon name="Info" className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
               <div className="text-sm text-blue-800">
+<<<<<<< HEAD
                 <h4 className="font-semibold mb-2">How to complete your booking:</h4>
                 <ol className="list-decimal list-inside space-y-1">
                   <li>Click "Contact Us to Complete Payment"</li>
                   <li>Reach us via WhatsApp or phone</li>
                   <li>We will confirm the booking and payment offline</li>
+=======
+                <h4 className="font-semibold mb-2">How M-Pesa Payment Works:</h4>
+                <ol className="list-decimal list-inside space-y-1">
+                  <li>Click "Pay with M-Pesa" button</li>
+                  <li>Enter your Safaricom phone number</li>
+                  <li>Check your phone for M-Pesa prompt</li>
+                  <li>Enter your M-Pesa PIN to complete payment</li>
+                  <li>Wait for confirmation</li>
+>>>>>>> 8586a9709f04ebd6c6f810187b28bf6e3e6bbbed
                 </ol>
               </div>
             </div>

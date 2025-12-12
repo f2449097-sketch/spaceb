@@ -1,6 +1,5 @@
 // Frontend API health monitoring
 import { API_BASE_URL } from '../config/api.js';
-
 export class APIHealthMonitor {
     static isBackendHealthy = false;
     static checkInterval = null;

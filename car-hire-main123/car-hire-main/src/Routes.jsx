@@ -15,6 +15,7 @@ import Homepage from './pages/homepage';
 import InstantBookingFlow from './pages/instant-booking-flow';
 import Confirmation from './pages/instant-booking-flow/Confirmation';
 import BookingSuccess from './pages/BookingSuccess';
+import MpesaPay from './pages/mpesa-pay';
 import CustomerRegistration from './pages/customer-registration';
 
 const Routes = () => {
@@ -32,6 +33,7 @@ const Routes = () => {
           <Route path="/instant-booking-flow" element={<InstantBookingFlow />} />
           <Route path="/booking-confirmation" element={<Confirmation />} />
           <Route path="/booking-success" element={<BookingSuccess />} />
+          <Route path="/mpesa-pay" element={<MpesaPay />} />
           <Route path="/customer-registration" element={<CustomerRegistration />} />
           
           {/* Admin Routes */}

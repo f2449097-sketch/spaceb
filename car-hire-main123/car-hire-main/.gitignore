@@ -1,4 +1,4 @@
-# ignore environment files
+# Environment files (NEVER commit these - they contain secrets!)
 .env
 .env.local
 .env.*.local
@@ -7,16 +7,26 @@ backend/.env.*
 server/.env
 server/.env.*
 
-# ignore node_modules
+# Dependencies
 node_modules/
 backend/node_modules/
 server/node_modules/
 
-# logs
+# IMPORTANT: DO NOT ignore package-lock.json
+# Netlify needs this file to install the exact package versions
+
+# Logs
 *.log
 backend/backend.log
 backend/server.log
 
-# build output
+# Build output (generated during build, not source code)
 dist/
 build/
+
+# Editor and OS files
+.DS_Store
+.vscode/settings.json
+*.swp
+*.swo
+*~
