@@ -5,7 +5,7 @@
   functions = "netlify/functions"
 
 [build.environment]
-  NPM_CONFIG_PRODUCTION = "false"
+  NPM_FLAGS = "--include=dev"
   NODE_VERSION = "18"
 
 [context.production]
