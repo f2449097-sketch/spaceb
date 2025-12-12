@@ -1,24 +1,14 @@
-<<<<<<< HEAD
-import React from 'react';
-import { useLocation, Link, useNavigate } from 'react-router-dom';
-import Header from '../../components/ui/Header';
-import Button from '../../components/ui/Button';
-=======
 import React, { useState } from 'react';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import Header from '../../components/ui/Header';
 import Button from '../../components/ui/Button';
 import MpesaPayment from '../../components/MpesaPayment';
 import { API_BASE_URL } from '../../config/api';
->>>>>>> 8586a9709f04ebd6c6f810187b28bf6e3e6bbbed
 
 const Confirmation = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
-<<<<<<< HEAD
-=======
   const [showPayment, setShowPayment] = useState(false);
->>>>>>> 8586a9709f04ebd6c6f810187b28bf6e3e6bbbed
   
   // Extract booking details from state
   const bookingData = state?.bookingData || {};
@@ -31,8 +21,6 @@ const Confirmation = () => {
     ? bookingData.adventureTitle
     : `${bookingData.vehicleMake} ${bookingData.vehicleModel}` || bookingData.vehicleName;
   
-<<<<<<< HEAD
-=======
   const accountReference = `BOOKING_${bookingData._id || Date.now()}`;
 
   const handlePaymentSuccess = async (paymentData) => {
@@ -66,7 +54,6 @@ const Confirmation = () => {
     }
   };
 
->>>>>>> 8586a9709f04ebd6c6f810187b28bf6e3e6bbbed
   const waNumber = '254759477359';
   const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(`Hi, I want to confirm my booking for ${displayName} worth KES ${totalAmount}.`)}`;
   const telUrl = 'tel:+254759477359';
@@ -83,11 +70,7 @@ const Confirmation = () => {
           <h1 className="text-2xl font-semibold text-gray-900">🎉 Booking Created Successfully!</h1>
           
           <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-<<<<<<< HEAD
-            <p className="text-green-800 font-medium">Your booking has been created and is pending offline payment.</p>
-=======
             <p className="text-green-800 font-medium">Your booking has been created and is pending payment.</p>
->>>>>>> 8586a9709f04ebd6c6f810187b28bf6e3e6bbbed
           </div>
 
           <div className="space-y-3 text-gray-700">
@@ -101,13 +84,6 @@ const Confirmation = () => {
           </div>
 
           <div className="border-t pt-6 space-y-4">
-<<<<<<< HEAD
-            <h2 className="text-lg font-semibold">Complete Your Booking:</h2>
-            <p className="text-sm text-gray-600">
-              In-app payments have been disabled. Please confirm your booking and arrange payment directly with our team.
-            </p>
-
-=======
             <h2 className="text-lg font-semibold">Complete Your Payment:</h2>
             
             <Button 
@@ -122,7 +98,6 @@ const Confirmation = () => {
               <p>or contact us directly:</p>
             </div>
             
->>>>>>> 8586a9709f04ebd6c6f810187b28bf6e3e6bbbed
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <a href={waUrl} target="_blank" rel="noreferrer">
                 <Button variant="outline" fullWidth>💬 WhatsApp Us</Button>
@@ -131,17 +106,6 @@ const Confirmation = () => {
                 <Button variant="outline" fullWidth>📞 Call Us</Button>
               </a>
             </div>
-<<<<<<< HEAD
-
-            <Button 
-              variant="default" 
-              onClick={() => navigate('/booking-success', { state: { bookingId: bookingData._id, amount: totalAmount }})} 
-              className="w-full bg-cosmic-depth hover:bg-cosmic-depth/90 text-lg py-4"
-            >
-              ✅ Mark Booking As Confirmed
-            </Button>
-=======
->>>>>>> 8586a9709f04ebd6c6f810187b28bf6e3e6bbbed
           </div>
 
           <div className="pt-6">
@@ -151,8 +115,6 @@ const Confirmation = () => {
           </div>
         </div>
       </main>
-<<<<<<< HEAD
-=======
       
       {/* M-Pesa Payment Modal */}
       {showPayment && (
@@ -165,11 +127,9 @@ const Confirmation = () => {
           />
         </div>
       )}
->>>>>>> 8586a9709f04ebd6c6f810187b28bf6e3e6bbbed
     </div>
   );
 };
 
 export default Confirmation;
-
 

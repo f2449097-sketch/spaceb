@@ -5,20 +5,14 @@ import HeroSection from './components/HeroSection';
 import Footer from '../../components/Footer';
 import Icon from '../../components/AppIcon';
 import Button from '../../components/ui/Button';
-<<<<<<< HEAD
-=======
 import MpesaPayment from '../../components/MpesaPayment';
->>>>>>> 8586a9709f04ebd6c6f810187b28bf6e3e6bbbed
 import { API_BASE_URL } from '../../config/api';
 
 const RoadTripAdventures = () => {
   const navigate = useNavigate();
   const [adventures, setAdventures] = useState([]);
   const [loading, setLoading] = useState(true);
-<<<<<<< HEAD
-=======
   const [paymentModal, setPaymentModal] = useState({ show: false, adventure: null });
->>>>>>> 8586a9709f04ebd6c6f810187b28bf6e3e6bbbed
 
   useEffect(() => {
     fetchAdventures();
@@ -59,8 +53,6 @@ const RoadTripAdventures = () => {
     }
   };
 
-<<<<<<< HEAD
-=======
   const handlePayNow = (adventure) => {
     // Check if adventure is fully booked
     if (adventure.availableSeats === 0) {
@@ -71,7 +63,6 @@ const RoadTripAdventures = () => {
     setPaymentModal({ show: true, adventure });
   };
 
->>>>>>> 8586a9709f04ebd6c6f810187b28bf6e3e6bbbed
   const handleReserveNow = (adventure) => {
     // Check if adventure is fully booked
     if (adventure.availableSeats === 0) {
@@ -96,8 +87,6 @@ const RoadTripAdventures = () => {
     });
   };
 
-<<<<<<< HEAD
-=======
   const handlePaymentSuccess = async (paymentData) => {
     console.log('Payment successful:', paymentData);
     try {
@@ -132,7 +121,6 @@ const RoadTripAdventures = () => {
     }
   };
 
->>>>>>> 8586a9709f04ebd6c6f810187b28bf6e3e6bbbed
   return (
     <div className="min-h-screen bg-surface-premium">
       <Header />
@@ -233,8 +221,6 @@ const RoadTripAdventures = () => {
                       ) : (
                         <div className="space-y-2">
                           <Button
-<<<<<<< HEAD
-=======
                             variant="default"
                             size="sm"
                             onClick={() => handlePayNow(adventure)}
@@ -245,7 +231,6 @@ const RoadTripAdventures = () => {
                             Pay & Book Now
                           </Button>
                           <Button
->>>>>>> 8586a9709f04ebd6c6f810187b28bf6e3e6bbbed
                             variant="outline"
                             size="sm"
                             onClick={() => handleReserveNow(adventure)}
@@ -303,8 +288,6 @@ const RoadTripAdventures = () => {
           </section>
         )}
       </main>
-<<<<<<< HEAD
-=======
       
       {/* Payment Modal */}
       {paymentModal.show && paymentModal.adventure && (
@@ -318,7 +301,6 @@ const RoadTripAdventures = () => {
         </div>
       )}
 
->>>>>>> 8586a9709f04ebd6c6f810187b28bf6e3e6bbbed
       {/* Footer */}
       <Footer />
     </div>
