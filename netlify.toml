@@ -12,6 +12,8 @@
 [build.environment]
   # Node version for build and runtime
   NODE_VERSION = "18"
+  # Force npm to install devDependencies (needed for Vite)
+  NPM_CONFIG_PRODUCTION = "false"
 
 # Redirect all API requests to the serverless function
 [[redirects]]
