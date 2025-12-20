@@ -2,11 +2,13 @@
 # This configuration deploys both frontend and backend as a unified application
 
 [build]
-  # Build command for the frontend (Vite)
+  # Base directory for the project
+  base = "car-hire-main123/car-hire-main"
+  # Build command (relative to base)
   command = "npm run build"
-  # Directory containing the built frontend files
+  # Directory containing built files (relative to base)
   publish = "dist"
-  # Functions directory for serverless backend
+  # Functions directory (relative to base)
   functions = "netlify/functions"
 
 [build.environment]
