@@ -151,10 +151,7 @@ const routes = {
     vehicles: require('../../backend/routes/vehicles'),
     bookings: require('../../backend/routes/bookings'),
     adventureBookings: require('../../backend/routes/adventure-bookings'),
-<<<<<<< HEAD
-=======
     mpesa: require('../../backend/routes/mpesa'),
->>>>>>> 8586a9709f04ebd6c6f810187b28bf6e3e6bbbed
     adminAuth: require('../../backend/routes/admin-auth'),
     admin: require('../../backend/routes/admin'),
     system: require('../../backend/routes/system'),
@@ -192,10 +189,7 @@ app.get('/images/vehicles/:id', async (req, res) => {
 app.use('/api/vehicles', routes.vehicles);
 app.use('/api/bookings', routes.bookings);
 app.use('/api/adventure-bookings', routes.adventureBookings);
-<<<<<<< HEAD
-=======
 app.use('/api/mpesa', routes.mpesa);
->>>>>>> 8586a9709f04ebd6c6f810187b28bf6e3e6bbbed
 app.use('/api/admin', routes.admin);
 app.use('/api/admin/auth', routes.adminAuth);
 app.use('/api/system', routes.system);
