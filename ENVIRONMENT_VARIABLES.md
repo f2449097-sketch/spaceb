@@ -2,6 +2,11 @@
 
 This document details all environment variables required for deploying the SpaceBorne Car Hire application on Netlify.
 
+<<<<<<< HEAD
+> **Note:** In-app payments are disabled. You can ignore any legacy `MPESA_*` variables; they are not used by the application anymore.
+
+=======
+>>>>>>> 8586a9709f04ebd6c6f810187b28bf6e3e6bbbed
 ## 🔧 Required Environment Variables
 
 ### MongoDB Database Configuration

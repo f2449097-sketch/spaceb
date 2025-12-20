@@ -1,11 +1,11 @@
 // Frontend API health monitoring
+import { API_BASE_URL } from '../config/api.js';
 export class APIHealthMonitor {
     static isBackendHealthy = false;
     static checkInterval = null;
 
     static async checkHealth() {
         try {
-            const { API_BASE_URL } = await import('../config/api');
             const response = await fetch(`${API_BASE_URL}/system/health`, {
                 credentials: 'include'
             });
