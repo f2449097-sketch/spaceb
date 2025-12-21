@@ -32,41 +32,15 @@ const VehicleCard = ({ vehicle = {} }) => {
     <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
       <div className="aspect-[16/9] sm:aspect-[3/2] relative">
         <img
-          src={imageSrc}
+          src={_id ? `/api/vehicles/${_id}/image` : '/assets/images/no_image.png'}
           alt={name}
           loading="lazy"
           decoding="async"
           className="w-full h-full object-cover"
-          onError={async (e) => {
-              // Try secondary endpoint first if we haven't
-              if (!triedSecondary && secondaryImageUrl) {
-                setTriedSecondary(true);
-                setImageSrc(secondaryImageUrl);
-                e.target.src = secondaryImageUrl;
-                return;
-              }
-
-              // If secondary fails, attempt to fetch as blob and convert to object URL (useful when server sets CORS and other headers)
-              if (!triedBlobFallback && (primaryImageUrl || secondaryImageUrl)) {
-                setTriedBlobFallback(true);
-                const urlToTry = imageSrc || primaryImageUrl || secondaryImageUrl;
-                try {
-                  const resp = await fetch(urlToTry, { mode: 'cors' });
-                  if (resp.ok) {
-                    const blob = await resp.blob();
-                    const objUrl = URL.createObjectURL(blob);
-                    setImageSrc(objUrl);
-                    e.target.src = objUrl;
-                    return;
-                  }
-                } catch (err) {
-                  // ignore and fall through to placeholder
-                }
-              }
-
-              // Final fallback to local placeholder
-              e.target.src = '/assets/images/no_image.png';
-            }}
+          onError={(e) => {
+            e.target.onerror = null; 
+            e.target.src = '/assets/images/no_image.png';
+          }}
         />
         <div className="absolute top-2 right-2">
           <span className={`px-3 py-1 rounded-full text-sm font-medium shadow-sm ${
