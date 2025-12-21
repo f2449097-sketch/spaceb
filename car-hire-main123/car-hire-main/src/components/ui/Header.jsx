@@ -80,7 +80,7 @@ const Header = () => {
 
           {/* Desktop Navigation - Hidden on admin pages */}
           {!isAdminPage && (
-            <nav className="flex items-center gap-2">
+            <nav className="hidden lg:flex items-center gap-2">
               {navigationItems?.map((item) => (
                 <Link
                   key={item?.path}
@@ -143,7 +143,7 @@ const Header = () => {
             variant="ghost"
             size="sm"
             iconName={isMenuOpen ? "X" : "Menu"}
-            className="hidden text-text-charcoal hover:text-cosmic-depth min-h-[44px] min-w-[44px]"
+            className="lg:hidden text-text-charcoal hover:text-cosmic-depth min-h-[44px] min-w-[44px]"
             onClick={toggleMenu}
           />
         </div>
