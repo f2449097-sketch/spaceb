@@ -9,6 +9,8 @@ const Hero = () => {
         <img 
           src="/images/benz.jpg" 
           alt="Luxury Car" 
+          fetchpriority="high"
+          loading="eager"
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70" />
