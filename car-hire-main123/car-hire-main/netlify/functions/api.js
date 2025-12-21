@@ -160,14 +160,17 @@ const routes = {
     adventures: require('../../backend/routes/adventures')
 };
 
-// Register vehicle image route (unchanged from original)
-app.get('/images/vehicles/:id', async (req, res) => {
+// Register vehicle image route - handles both /images/vehicles/:id and /api/images/vehicles/:id
+// This ensures compatibility with different path prefixes after Netlify redirects
+const handleVehicleImage = async (req, res) => {
     try {
+        console.log(`[Image Route] Serving image for vehicle ID: ${req.params.id}, path: ${req.path}`);
         await connectDB();
         const Vehicle = require('../../backend/models/Vehicle');
         const vehicle = await Vehicle.findById(req.params.id).select('image');
         
         if (!vehicle || !vehicle.image) {
+            console.warn(`[Image Route] Vehicle or image not found for ID: ${req.params.id}`);
             return res.status(404).send('Image not found');
         }
         
@@ -180,22 +183,28 @@ app.get('/images/vehicles/:id', async (req, res) => {
         });
         res.send(vehicle.image.data);
     } catch (error) {
-        console.error('Error serving image:', error);
+        console.error('[Image Route] Error serving image:', error);
         res.status(500).send('Error loading image');
     }
-});
+};
 
-// Register all API routes (unchanged from original)
-app.use('/api/vehicles', routes.vehicles);
-app.use('/api/bookings', routes.bookings);
-app.use('/api/adventure-bookings', routes.adventureBookings);
-app.use('/api/mpesa', routes.mpesa);
-app.use('/api/admin', routes.admin);
-app.use('/api/admin/auth', routes.adminAuth);
-app.use('/api/system', routes.system);
-app.use('/api/messages', routes.messages);
-app.use('/api/admin/users', routes.adminUsers);
-app.use('/api/adventures', routes.adventures);
+// Mount at both paths for maximum compatibility
+app.get(['/images/vehicles/:id', '/api/images/vehicles/:id'], handleVehicleImage);
+
+// Register all API routes
+// IMPORTANT: Routes are mounted at BOTH /api/* and /* paths to handle Netlify's path rewriting.
+// When Netlify redirects /api/* to /.netlify/functions/api/:splat, serverless-http may strip
+// the prefix, so we mount at both paths to ensure requests work regardless of how the path is processed.
+app.use(['/api/vehicles', '/vehicles'], routes.vehicles);
+app.use(['/api/bookings', '/bookings'], routes.bookings);
+app.use(['/api/adventure-bookings', '/adventure-bookings'], routes.adventureBookings);
+app.use(['/api/mpesa', '/mpesa'], routes.mpesa);
+app.use(['/api/admin', '/admin'], routes.admin);
+app.use(['/api/admin/auth', '/admin/auth'], routes.adminAuth);
+app.use(['/api/system', '/system'], routes.system);
+app.use(['/api/messages', '/messages'], routes.messages);
+app.use(['/api/admin/users', '/admin/users'], routes.adminUsers);
+app.use(['/api/adventures', '/adventures'], routes.adventures);
 
 // API request logging
 let lastVerifyLogAt = 0;
