@@ -279,6 +279,31 @@ body {
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   }
   
+  /* Ensure header content doesn't overflow */
+  .header-mobile > div > div {
+    overflow: hidden !important;
+  }
+  
+  /* Logo container - prevent overflow */
+  .header-mobile a[href="/homepage"] {
+    max-width: calc(100vw - 100px) !important; /* Space for menu button + padding */
+    min-width: 0 !important;
+    flex-shrink: 1 !important;
+  }
+  
+  /* Ensure desktop nav is hidden on mobile */
+  .header-mobile nav.lg\:flex {
+    display: none !important;
+  }
+  
+  /* Menu button - always visible and properly sized */
+  .header-mobile button.lg\:hidden {
+    flex-shrink: 0 !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+    margin-left: auto !important;
+  }
+  
   /* Hero section mobile */
   .hero-mobile {
     min-height: 100vh;
