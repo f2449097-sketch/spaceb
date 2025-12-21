@@ -3,9 +3,8 @@ const { ServerApiVersion } = require('mongodb');
 
 const connectDB = async () => {
     try {
-        const uri = "mongodb+srv://spaceborne:bornespace%402030@spaceborne.moqedze.mongodb.net/car-hire?retryWrites=true&w=majority&appName=spaceborne";
         
-        const conn = await mongoose.connect(uri, {
+        const conn = await mongoose.connect(process.env.MONGODB_URI, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
             serverApi: {

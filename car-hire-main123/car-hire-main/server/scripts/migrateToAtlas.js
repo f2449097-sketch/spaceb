@@ -6,7 +6,7 @@ const Vehicle = require('../models/Vehicle');
 const LOCAL_MONGODB_URI = 'mongodb://localhost:27017/car-hire';
 
 // Atlas connection string (from your current config)
-const ATLAS_MONGODB_URI = "mongodb+srv://spaceborne:bornespace%402030@spaceborne.moqedze.mongodb.net/car-hire?retryWrites=true&w=majority&appName=spaceborne";
+const mongoURI = process.env.MONGODB_URI;
 
 // Default values for required fields
 const DEFAULT_VALUES = {

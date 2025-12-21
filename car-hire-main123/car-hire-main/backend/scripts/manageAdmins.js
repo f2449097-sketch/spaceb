@@ -7,7 +7,7 @@ const Admin = require('../models/Admin');
 dotenv.config();
 
 // MongoDB Connection
-const MONGODB_URI = 'mongodb+srv://spaceborne:bornespace%402030@spaceborne.moqedze.mongodb.net/car-hire?retryWrites=true&w=majority&appName=spaceborne';
+const MONGODB_URI = process.env.MONGODB_URI;
 const DB_NAME = 'car-hire';
 
 async function connectDB() {
