@@ -106,7 +106,7 @@ bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919
 
 ```env
 PORT=3001
-MONGODB_URI=mongodb+srv://spaceborne:bornespace%402030@spaceborne.moqedze.mongodb.net/car-hire?retryWrites=true&w=majority&appName=spaceborne
+MONGODB_URI=mongodb+srv://<username>:<password>@<cluster>.mongodb.net/...
 
 # M-Pesa API Configuration
 MPESA_CONSUMER_KEY=PASTE_YOUR_CONSUMER_KEY_HERE

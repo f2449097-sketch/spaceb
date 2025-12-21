@@ -138,7 +138,7 @@ This is **CRITICAL** - without these, your backend won't connect to MongoDB!
 
 | Variable Name | Value | Where to Find It |
 |--------------|-------|------------------|
-| **MONGODB_URI** | `mongodb+srv://spaceborne:bornespace%402030@spaceborne.moqedze.mongodb.net/?retryWrites=true&w=majority&appName=spaceborne` | Your MongoDB connection string |
+| **MONGODB_URI** | `mongodb+srv://<username>:<password>@<cluster>/<db>` | Your MongoDB connection string |
 | **DB_NAME** | `car-hire` | Your database name |
 | **JWT_SECRET** | Generate this (see below) | For security |
 | **NODE_VERSION** | `18` | Node.js version |
@@ -261,7 +261,7 @@ Environment variables are **secret configuration settings** that your app needs 
 - **What**: Connection string to your database
 - **Format**: `mongodb+srv://username:password@cluster.mongodb.net/...`
 - **Why**: Tells your backend where the database is
-- **Your Value**: `mongodb+srv://spaceborne:bornespace%402030@spaceborne.moqedze.mongodb.net/?retryWrites=true&w=majority&appName=spaceborne`
+- **Your Value**: `mongodb+srv://<username>:<password>@<cluster>/<db>`
 
 #### **DB_NAME**
 - **What**: Name of your database

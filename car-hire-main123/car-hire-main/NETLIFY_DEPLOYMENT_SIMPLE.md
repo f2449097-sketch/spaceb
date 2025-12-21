@@ -46,7 +46,7 @@ You'll need this for Netlify environment variables.
 
 **Your connection string should be:**
 ```
-mongodb+srv://spaceborne:bornespace%402030@spaceborne.moqedze.mongodb.net/?retryWrites=true&w=majority&appName=spaceborne
+mongodb+srv://<username>:<password>@<cluster>/<db>
 ```
 
 ---
@@ -328,7 +328,7 @@ Your free tier includes:
 Copy and paste these into Netlify (replace values):
 
 ```
-MONGODB_URI=mongodb+srv://spaceborne:bornespace%402030@spaceborne.moqedze.mongodb.net/?retryWrites=true&w=majority&appName=spaceborne
+MONGODB_URI=mongodb+srv://<username>:<password>@<cluster>/<db>
 DB_NAME=car-hire
 JWT_SECRET=[generate-with-node-command]
 NODE_VERSION=18
