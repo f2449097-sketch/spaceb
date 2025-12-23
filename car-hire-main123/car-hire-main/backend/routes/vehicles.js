@@ -1,81 +1,19 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const path = require('path');
 const Vehicle = require('../models/Vehicle');
 const authMiddleware = require('../middleware/auth');
 const mongoose = require('mongoose');
+const { storage, cloudinary } = require('../config/cloudinary');
 
-// Route to get vehicle image (primary image or specific index)
-router.get('/:id/image/:index?', async (req, res) => {
-    try {
-        const index = req.params.index ? parseInt(req.params.index) : 0;
-        
-        // Only fetch the image data
-        const vehicle = await Vehicle.findById(req.params.id).select('image images');
-        if (!vehicle) {
-            return res.status(404).send('Vehicle not found');
-        }
-        
-        // Get the requested image
-        let imageData;
-        if (index === 0 && vehicle.image) {
-            imageData = vehicle.image;
-        } else if (vehicle.images && vehicle.images[index]) {
-            imageData = vehicle.images[index];
-        } else {
-            return res.status(404).send('Image not found');
-        }
-        
-        // Generate ETag for caching
-        const etag = `"${vehicle._id}-${index}-${imageData.data.length}"`;
-        
-        // Check if browser has a cached version
-        if (req.headers['if-none-match'] === etag) {
-            return res.status(304).end();
-        }
-        
-        // Set proper headers for image serving
-        res.set({
-            'Content-Type': imageData.contentType,
-            'Content-Length': imageData.data.length,
-            'Cache-Control': 'public, max-age=31536000', // Cache for 1 year
-            'ETag': etag,
-            'Accept-Ranges': 'bytes',
-            'Access-Control-Allow-Origin': '*',
-            'Cross-Origin-Resource-Policy': 'cross-origin',
-            'Vary': 'Accept-Encoding'
-        });
-        
-        res.send(imageData.data);
-    } catch (error) {
-        console.error('Error serving image:', error);
-        res.status(500).json({ message: error.message });
-    }
-});
-
-// Configure multer for memory storage
-const storage = multer.memoryStorage();
-
-const upload = multer({ 
-    storage: storage,
-    limits: {
-        fileSize: 5 * 1024 * 1024 // 5MB limit
-    },
-    fileFilter: (req, file, cb) => {
-        if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
-            return cb(new Error('Only image files are allowed!'), false);
-        }
-        cb(null, true);
-    }
-});
+const upload = multer({ storage: storage });
 
 // Update: allow up to 4 images and support single 'image' field as well
 const multiUpload = (req, res, next) => {
     const arrayUploader = upload.array('images', 4);
     const singleUploader = upload.single('image');
 
-    // Try array uploader first; if no files and a single file field exists, fall back
+    // Try array uploader first
     arrayUploader(req, res, function (err) {
         if (err) return next(err);
         if (req.files && req.files.length > 0) return next();
@@ -91,7 +29,7 @@ const multiUpload = (req, res, next) => {
     });
 };
 
-// Get all vehicles with optional filters
+// Get all vehicles
 router.get('/', async (req, res) => {
     try {
         const { minPrice, maxPrice, type } = req.query;
@@ -107,21 +45,35 @@ router.get('/', async (req, res) => {
             filter.type = type;
         }
 
-        // Don't send image data in the list to improve performance,
-        // but include a lightweight imageUrl pointer so frontend can request the image when needed
-        const vehicles = await Vehicle.find(filter).select('-image.data -images.data');
-        const host = req.get('host');
-        const protocol = req.protocol;
+        // Get vehicles - handle both old format (Buffer) and new format (URL strings)
+        const vehicles = await Vehicle.find(filter);
+        
+        // Transform vehicles to ensure image fields are URLs (handle old Buffer format)
         const vehiclesWithUrls = vehicles.map(v => {
             const obj = v.toObject ? v.toObject() : v;
-            obj.imageUrl = `${protocol}://${host}/api/vehicles/${obj._id}/image`;
-            // Add imageUrls array for all images
-            const imageCount = obj.images ? obj.images.length : 1;
-            obj.imageUrls = Array.from({ length: imageCount }, (_, i) => 
-                `${protocol}://${host}/api/vehicles/${obj._id}/image/${i}`
-            );
+            
+            // Handle old format: image is { data: Buffer, contentType: String }
+            if (obj.image && typeof obj.image === 'object' && obj.image.data) {
+                // Old format - convert to data URL or set to null (can't serve Buffer directly anymore)
+                // For old vehicles, you'll need to re-upload images or they won't display
+                obj.image = null;
+                obj.hasOldImageFormat = true;
+            }
+            
+            // Handle old format: images array contains Buffer objects
+            if (obj.images && Array.isArray(obj.images)) {
+                obj.images = obj.images.map(img => {
+                    if (typeof img === 'object' && img.data) {
+                        // Old Buffer format - can't convert, set to null
+                        return null;
+                    }
+                    return img; // Already a URL string
+                }).filter(Boolean); // Remove nulls
+            }
+            
             return obj;
         });
+        
         res.json(vehiclesWithUrls);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -135,13 +87,25 @@ router.get('/:id', async (req, res) => {
         if (!vehicle) {
             return res.status(404).json({ message: 'Vehicle not found' });
         }
-        const obj = vehicle.toObject();
-        obj.imageUrl = `${req.protocol}://${req.get('host')}/api/vehicles/${obj._id}/image`;
-        // Add imageUrls array for all images
-        const imageCount = obj.images ? obj.images.length : 1;
-        obj.imageUrls = Array.from({ length: imageCount }, (_, i) => 
-            `${req.protocol}://${req.get('host')}/api/vehicles/${obj._id}/image/${i}`
-        );
+        
+        const obj = vehicle.toObject ? vehicle.toObject() : vehicle;
+        
+        // Handle old format: image is { data: Buffer, contentType: String }
+        if (obj.image && typeof obj.image === 'object' && obj.image.data) {
+            obj.image = null;
+            obj.hasOldImageFormat = true;
+        }
+        
+        // Handle old format: images array contains Buffer objects
+        if (obj.images && Array.isArray(obj.images)) {
+            obj.images = obj.images.map(img => {
+                if (typeof img === 'object' && img.data) {
+                    return null; // Old Buffer format
+                }
+                return img; // Already a URL string
+            }).filter(Boolean);
+        }
+        
         res.json(obj);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -159,7 +123,6 @@ router.post('/', authMiddleware, multiUpload, async (req, res) => {
         const make = (req.body.make || '').trim();
         const model = (req.body.model || '').trim();
         const type = (req.body.type || '').trim();
-        const location = (req.body.location || '').trim();
         const seatsRaw = req.body.seats || (req.body.specifications && (() => {
             try { const s = JSON.parse(req.body.specifications); return s.seats; } catch(_) { return undefined; }
         })());
@@ -171,6 +134,7 @@ router.post('/', authMiddleware, multiUpload, async (req, res) => {
                 message: 'Required fields: make, model, type, seats, image'
             });
         }
+        
         if (!req.files || req.files.length === 0) {
             return res.status(400).json({ 
                 success: false,
@@ -178,18 +142,10 @@ router.post('/', authMiddleware, multiUpload, async (req, res) => {
             });
         }
 
-        // Save the first image as the primary image (required by schema)
-        const file = req.files[0];
-        const image = {
-            data: file.buffer,
-            contentType: file.mimetype
-        };
-
-        // Save all images in the images array
-        const images = req.files.map(f => ({
-            data: f.buffer,
-            contentType: f.mimetype
-        }));
+        // Use Cloudinary URLs
+        // req.files would have .path (which is the Cloudinary URL) due to multer-storage-cloudinary
+        const image = req.files[0].path;
+        const images = req.files.map(f => f.path);
 
         // Parse specifications if present
         let specifications;
@@ -236,7 +192,7 @@ router.post('/', authMiddleware, multiUpload, async (req, res) => {
             if (specifications.seats === undefined) specifications.seats = seats;
             vehicleData.specifications = specifications;
         } else {
-            // Build minimal specifications from individual fields if present
+             // Build minimal specifications from individual fields if present
             const specFromFields = {};
             if (req.body.transmission) specFromFields.transmission = req.body.transmission;
             if (req.body.fuelType) specFromFields.fuelType = req.body.fuelType;
@@ -252,6 +208,7 @@ router.post('/', authMiddleware, multiUpload, async (req, res) => {
 
         res.json({ success: true, vehicle });
     } catch (error) {
+        console.error('Error creating vehicle:', error);
         res.status(500).json({ message: error.message });
     }
 });
@@ -262,15 +219,23 @@ router.put('/:id', authMiddleware, upload.single('image'), async (req, res) => {
         const updates = { ...req.body };
         
         if (req.file) {
-            updates.imageUrl = `/uploads/${req.file.filename}`;
+            updates.image = req.file.path;
         }
 
         if (req.body.specifications) {
-            updates.specifications = JSON.parse(req.body.specifications);
+             try {
+                updates.specifications = JSON.parse(req.body.specifications);
+            } catch (e) {
+                 // ignore parsing error or handle it
+            }
         }
 
         if (req.body.features) {
-            updates.features = JSON.parse(req.body.features);
+             try {
+                updates.features = JSON.parse(req.body.features);
+            } catch (e) {
+                 // ignore
+            }
         }
 
         const vehicle = await Vehicle.findByIdAndUpdate(
@@ -288,23 +253,71 @@ router.put('/:id', authMiddleware, upload.single('image'), async (req, res) => {
     }
 });
 
+// Helper function to extract Cloudinary public ID from URL
+const getPublicIdFromUrl = (url) => {
+    if (!url || !url.includes('cloudinary.com')) return null;
+    try {
+        // Cloudinary URL format: https://res.cloudinary.com/[cloud]/image/upload/[version]/[folder]/[public_id].[ext]
+        // We need "[folder]/[public_id]"
+        const parts = url.split('/');
+        const uploadIndex = parts.indexOf('upload');
+        if (uploadIndex === -1) return null;
+        
+        // Everything after 'v12345678/' or the version part
+        const publicIdWithExt = parts.slice(uploadIndex + 2).join('/');
+        // Remove extension
+        return publicIdWithExt.split('.')[0];
+    } catch (error) {
+        console.error('Error extracting public ID:', error);
+        return null;
+    }
+};
+
 // Delete a vehicle (admin only)
 router.delete('/:id', authMiddleware, async (req, res) => {
     try {
         const { id } = req.params;
-        console.log('DELETE /api/vehicles called with id:', id);
-
         if (!mongoose.Types.ObjectId.isValid(id)) {
-            console.warn('Invalid ObjectId received:', id);
             return res.status(400).json({ message: 'Invalid vehicle id' });
         }
 
-        const vehicle = await Vehicle.findByIdAndDelete(id);
+        // 1. Find the vehicle first to get image URLs
+        const vehicle = await Vehicle.findById(id);
         if (!vehicle) {
-            console.warn('Vehicle not found for id:', id);
             return res.status(404).json({ message: 'Vehicle not found' });
         }
-        res.json({ message: 'Vehicle deleted', id });
+
+        // 2. Identify images to delete from Cloudinary
+        const imagesToDelete = [];
+        if (vehicle.image) imagesToDelete.push(vehicle.image);
+        if (vehicle.images && Array.isArray(vehicle.images)) {
+            vehicle.images.forEach(img => {
+                if (img && !imagesToDelete.includes(img)) {
+                    imagesToDelete.push(img);
+                }
+            });
+        }
+
+        // 3. Delete from Cloudinary
+        const deletionPromises = imagesToDelete
+            .map(url => getPublicIdFromUrl(url))
+            .filter(Boolean)
+            .map(publicId => {
+                console.log(`[Cloudinary Cleanup] Deleting public_id: ${publicId}`);
+                return cloudinary.uploader.destroy(publicId);
+            });
+
+        await Promise.all(deletionPromises);
+
+        // 4. Delete from MongoDB
+        await Vehicle.findByIdAndDelete(id);
+        
+        res.json({ 
+            success: true, 
+            message: 'Vehicle and associated cloud images deleted successfully', 
+            id,
+            imagesDeletedCount: deletionPromises.length
+        });
     } catch (error) {
         console.error('Error deleting vehicle:', error);
         res.status(500).json({ message: error.message });

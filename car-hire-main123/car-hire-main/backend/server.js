@@ -101,16 +101,10 @@ const routes = {
 app.get('/images/vehicles/:id', async (req, res) => {
     try {
         const Vehicle = require('./models/Vehicle');
-        const vehicle = await Vehicle.findById(req.params.id).select('image');
+        const vehicle = await Vehicle.findById(req.params.id);
         if (!vehicle || !vehicle.image) return res.status(404).send('Image not found');
-        res.set({
-            'Content-Type': vehicle.image.contentType,
-            'Content-Length': vehicle.image.data.length,
-            'Cache-Control': 'public, max-age=31536000',
-            'Access-Control-Allow-Origin': '*',
-            'Cross-Origin-Resource-Policy': 'cross-origin'
-        });
-        res.send(vehicle.image.data);
+        // Redirect to the Cloudinary URL
+        res.redirect(vehicle.image);
     } catch (error) {
         console.error('Error serving image:', error);
         res.status(500).send('Error loading image');

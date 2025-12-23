@@ -84,9 +84,10 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 // Logging middleware
 app.use(morgan('dev'));
 
-// Request logging
+// Request logging with detailed path information
 app.use((req, res, next) => {
-    console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+    console.log(`[Request] ${new Date().toISOString()} - ${req.method} ${req.url}`);
+    console.log(`[Request] Original URL: ${req.originalUrl}, Path: ${req.path}, Base URL: ${req.baseUrl}`);
     next();
 });
 
@@ -162,34 +163,67 @@ const routes = {
 
 // Register vehicle image route - handles both /images/vehicles/:id and /api/images/vehicles/:id
 // This ensures compatibility with different path prefixes after Netlify redirects
+// Images are stored in MongoDB as Buffer data, not in filesystem
 const handleVehicleImage = async (req, res) => {
     try {
-        console.log(`[Image Route] Serving image for vehicle ID: ${req.params.id}, path: ${req.path}`);
+        const vehicleId = req.params.id;
+        const index = req.params.index ? parseInt(req.params.index) : 0;
+        console.log(`[Image Route] Serving image for vehicle ID: ${vehicleId}, index: ${index}, path: ${req.path}`);
+        
         await connectDB();
         const Vehicle = require('../../backend/models/Vehicle');
-        const vehicle = await Vehicle.findById(req.params.id).select('image');
         
-        if (!vehicle || !vehicle.image) {
-            console.warn(`[Image Route] Vehicle or image not found for ID: ${req.params.id}`);
+        // Fetch vehicle with image data from MongoDB
+        const vehicle = await Vehicle.findById(vehicleId).select('image images');
+        
+        if (!vehicle) {
+            console.warn(`[Image Route] Vehicle not found for ID: ${vehicleId}`);
+            return res.status(404).send('Vehicle not found');
+        }
+        
+        // Get the requested image from MongoDB
+        let imageData;
+        if (index === 0 && vehicle.image) {
+            imageData = vehicle.image; // Primary image from MongoDB
+        } else if (vehicle.images && vehicle.images[index]) {
+            imageData = vehicle.images[index]; // Image from images array in MongoDB
+        } else {
+            console.warn(`[Image Route] Image not found for vehicle ID: ${vehicleId}, index: ${index}`);
             return res.status(404).send('Image not found');
         }
         
+        // Generate ETag for caching
+        const etag = `"${vehicleId}-${index}-${imageData.data.length}"`;
+        
+        // Check if browser has a cached version
+        if (req.headers['if-none-match'] === etag) {
+            return res.status(304).end();
+        }
+        
+        // Set proper headers for image serving from MongoDB Buffer
         res.set({
-            'Content-Type': vehicle.image.contentType,
-            'Content-Length': vehicle.image.data.length,
-            'Cache-Control': 'public, max-age=31536000',
+            'Content-Type': imageData.contentType,
+            'Content-Length': imageData.data.length,
+            'Cache-Control': 'public, max-age=31536000', // Cache for 1 year
+            'ETag': etag,
+            'Accept-Ranges': 'bytes',
             'Access-Control-Allow-Origin': '*',
-            'Cross-Origin-Resource-Policy': 'cross-origin'
+            'Cross-Origin-Resource-Policy': 'cross-origin',
+            'Vary': 'Accept-Encoding'
         });
-        res.send(vehicle.image.data);
+        
+        // Send the image Buffer data from MongoDB
+        res.send(imageData.data);
     } catch (error) {
-        console.error('[Image Route] Error serving image:', error);
+        console.error('[Image Route] Error serving image from MongoDB:', error);
         res.status(500).send('Error loading image');
     }
 };
 
-// Mount at both paths for maximum compatibility
-app.get(['/images/vehicles/:id', '/api/images/vehicles/:id'], handleVehicleImage);
+// Note: The main image route is handled by the vehicles router at /api/vehicles/:id/image/:index?
+// This is a backup route for /images/vehicles/:id pattern (alternative path)
+// The vehicles router handles the primary route: /api/vehicles/:id/image/:index?
+app.get(['/images/vehicles/:id/:index?', '/api/images/vehicles/:id/:index?'], handleVehicleImage);
 
 // Register all API routes
 // IMPORTANT: Routes are mounted at BOTH /api/* and /* paths to handle Netlify's path rewriting.
@@ -288,16 +322,40 @@ module.exports.handler = async (event, context) => {
     // Keep connection alive across invocations
     context.callbackWaitsForEmptyEventLoop = false;
     
+    // Log incoming event for debugging image requests
+    if (event.path && (event.path.includes('/image') || event.path.includes('/vehicles'))) {
+        console.log('[Image Debug] Event received:', {
+            path: event.path,
+            rawPath: event.rawPath,
+            httpMethod: event.httpMethod,
+            pathParameters: event.pathParameters,
+            queryStringParameters: event.queryStringParameters
+        });
+    }
+    
     try {
         await connectDB();
-        return await handler(event, context);
+        const result = await handler(event, context);
+        
+        // Log response for image requests
+        if (event.path && (event.path.includes('/image') || event.path.includes('/vehicles'))) {
+            console.log('[Image Debug] Response status:', result?.statusCode);
+        }
+        
+        return result;
     } catch (error) {
-        console.error('Function error:', error);
+        console.error('[Function Error]', error);
+        console.error('[Function Error] Stack:', error.stack);
         return {
             statusCode: 500,
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
             body: JSON.stringify({
                 success: false,
-                message: 'Internal server error'
+                message: 'Internal server error',
+                error: process.env.NODE_ENV === 'production' ? undefined : error.message
             })
         };
     }

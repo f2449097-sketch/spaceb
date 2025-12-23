@@ -7,12 +7,12 @@ const vehicleSchema = new mongoose.Schema({
         trim: true
     },
     image: {
-        data: { type: Buffer, required: true },
-        contentType: { type: String, required: true }
+        type: String,
+        required: true
     },
     images: [{
-        data: { type: Buffer, required: true },
-        contentType: { type: String, required: true }
+        type: String,
+        required: true
     }],
     make: {
         type: String,

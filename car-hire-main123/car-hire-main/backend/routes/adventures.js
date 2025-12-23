@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Adventure = require('../models/Adventure');
 const authMiddleware = require('../middleware/auth');
+const { cloudinary } = require('../config/cloudinary');
+const mongoose = require('mongoose');
 
 // List all adventures
 router.get('/', async (req, res) => {
@@ -78,42 +80,58 @@ router.put('/:id', authMiddleware, async (req, res) => {
     }
 });
 
+// Helper function to extract Cloudinary public ID from URL
+const getPublicIdFromUrl = (url) => {
+    if (!url || !url.includes('cloudinary.com')) return null;
+    try {
+        const parts = url.split('/');
+        const uploadIndex = parts.indexOf('upload');
+        if (uploadIndex === -1) return null;
+        const publicIdWithExt = parts.slice(uploadIndex + 2).join('/');
+        return publicIdWithExt.split('.')[0];
+    } catch (error) {
+        console.error('Error extracting public ID:', error);
+        return null;
+    }
+};
+
 // Delete (admin only)
 router.delete('/:id', authMiddleware, async (req, res) => {
     try {
         const { id } = req.params;
         console.log('Delete request received for adventure ID:', id);
         
-        // Validate ID format
-        if (!id.match(/^[0-9a-fA-F]{24}$/)) {
-            console.log('Invalid ID format:', id);
-            return res.status(400).json({ 
-                success: false, 
-                message: 'Invalid adventure ID format' 
-            });
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ success: false, message: 'Invalid adventure ID format' });
         }
         
-        // Validate adventure exists
         const adventure = await Adventure.findById(id);
         if (!adventure) {
-            console.log('Adventure not found with ID:', id);
-            return res.status(404).json({ 
-                success: false, 
-                message: 'Adventure not found'
-            });
+            return res.status(404).json({ success: false, message: 'Adventure not found' });
         }
         
-        console.log('Found adventure to delete:', adventure);
+        // 1. Cleanup Cloudinary image if it exists
+        if (adventure.image) {
+            const publicId = getPublicIdFromUrl(adventure.image);
+            if (publicId) {
+                console.log(`[Cloudinary Cleanup] Deleting adventure image: ${publicId}`);
+                await cloudinary.uploader.destroy(publicId).catch(err => {
+                    console.error('Cloudinary destruction failed:', err);
+                });
+            }
+        }
 
-        // Delete the adventure
+        // 2. Delete from MongoDB
         await Adventure.findByIdAndDelete(id);
+        
         res.json({ 
             success: true, 
-            message: 'Adventure deleted successfully',
+            message: 'Adventure and associated cloud image deleted successfully',
             id: id 
         });
     } catch (e) {
-        res.status(400).json({ success: false, message: e.message });
+        console.error('Error deleting adventure:', e);
+        res.status(500).json({ success: false, message: e.message });
     }
 });
 

@@ -15,24 +15,21 @@ const VehicleCard = ({ vehicle = {} }) => {
   const seats = specifications.seats || '-';
   const transmission = specifications.transmission || '-';
 
-  // Prefer explicit imageUrl returned by the API if present, otherwise construct fallback URLs
-  const apiProvidedImageUrl = vehicle.imageUrl || null;
-  const primaryImageUrl = apiProvidedImageUrl || (_id ? `${UPLOADS_URL}/images/vehicles/${_id}` : null);
-  const secondaryImageUrl = _id ? `${UPLOADS_URL}/api/vehicles/${_id}/image` : null;
-
-  // Debug: log the image URLs being used
-  console.log('Vehicle image primary URL:', primaryImageUrl, 'secondary URL:', secondaryImageUrl, 'for vehicle', name);
-
-  // Error state handling and fallback attempts. We'll also try fetching the image as a blob when <img> errors
-  const [imageSrc, setImageSrc] = React.useState(primaryImageUrl || '/assets/images/no_image.png');
-  const [triedSecondary, setTriedSecondary] = React.useState(false);
-  const [triedBlobFallback, setTriedBlobFallback] = React.useState(false);
+  // Get image URL - now images are stored as Cloudinary URL strings directly in vehicle.image
+  // Handle both old format (imageUrl) and new format (image as URL string)
+  const imageUrl = vehicle.imageUrl || vehicle.image || null;
+  
+  // If image is a Cloudinary URL (starts with http), use it directly
+  // Otherwise fallback to placeholder
+  const imageSrc = imageUrl && (imageUrl.startsWith('http') || imageUrl.startsWith('//')) 
+    ? imageUrl 
+    : '/assets/images/no_image.png';
 
   return (
     <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
       <div className="aspect-[16/9] sm:aspect-[3/2] relative">
         <img
-          src={_id ? `/api/vehicles/${_id}/image` : '/assets/images/no_image.png'}
+          src={imageSrc}
           alt={name}
           loading="lazy"
           decoding="async"

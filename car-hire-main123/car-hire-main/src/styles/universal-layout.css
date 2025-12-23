@@ -135,69 +135,81 @@ body {
 
 /* Mobile Navigation Enhancements */
 @media screen and (max-width: 1365px) {
-  /* Ensure navigation is touch-friendly */
-  nav a, nav button {
+  /* Ensure navigation is touch-friendly - but only for desktop nav (lg and above) */
+  header nav.lg\:flex a, header nav.lg\:flex button {
     min-height: 44px !important;
     min-width: 44px !important;
     touch-action: manipulation !important;
   }
   
-  /* Make header navigation more accessible on small screens */
-  header nav {
-    gap: 8px !important;
+  /* Hide desktop navigation on mobile - ensure it's truly hidden below lg breakpoint */
+  @media (max-width: 1023px) {
+    header nav.lg\:flex {
+      display: none !important;
+    }
   }
   
-  header nav a {
-    padding: 8px 12px !important;
-    font-size: 14px !important;
-    border-radius: 8px !important;
-  }
-  
-  /* Ensure Book Now button is prominent */
-  header nav a[href="/instant-booking-flow"] {
-    background: #ff6f00 !important;
-    color: white !important;
-    font-weight: 600 !important;
-    box-shadow: 0 4px 12px rgba(255, 111, 0, 0.3) !important;
-  }
-  
-  /* Add touch feedback */
-  header nav a:active {
-    transform: scale(0.95) !important;
-    transition: transform 0.1s ease !important;
+  /* Make header navigation more accessible on large screens only */
+  @media (min-width: 1024px) {
+    header nav {
+      gap: 8px !important;
+    }
+    
+    header nav a {
+      padding: 8px 12px !important;
+      font-size: 14px !important;
+      border-radius: 8px !important;
+    }
+    
+    /* Ensure Book Now button is prominent */
+    header nav a[href="/instant-booking-flow"] {
+      background: #ff6f00 !important;
+      color: white !important;
+      font-weight: 600 !important;
+      box-shadow: 0 4px 12px rgba(255, 111, 0, 0.3) !important;
+    }
+    
+    /* Add touch feedback */
+    header nav a:active {
+      transform: scale(0.95) !important;
+      transition: transform 0.1s ease !important;
+    }
   }
 }
 
-/* Extra small screens - ensure navigation is always visible */
+/* Extra small screens - ensure logo and menu button don't conflict */
 @media screen and (max-width: 480px) {
-  /* Adjust header for very small screens */
+  /* Adjust header for very small screens - prevent wrapping */
   header .flex.items-center.justify-between {
-    flex-wrap: wrap !important;
+    flex-wrap: nowrap !important;
     gap: 8px !important;
+    overflow: hidden !important;
   }
   
-  /* Make navigation stack if needed */
-  header nav {
-    order: 3 !important;
-    width: 100% !important;
-    justify-content: center !important;
-    padding: 8px 0 !important;
-    border-top: 1px solid rgba(0,0,0,0.1) !important;
+  /* Ensure logo doesn't take too much space */
+  header a[href="/homepage"] {
+    max-width: calc(100% - 60px) !important; /* Leave space for menu button */
+    min-width: 0 !important;
+    flex-shrink: 1 !important;
   }
   
-  /* Smaller navigation items for very small screens */
-  header nav a {
-    padding: 6px 8px !important;
-    font-size: 12px !important;
+  /* Ensure logo text truncates properly */
+  header a[href="/homepage"] span {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
   }
   
-  header nav a span {
+  /* Hide desktop navigation completely on mobile */
+  header nav.lg\:flex {
     display: none !important;
   }
   
-  /* Show only icons on very small screens */
-  header nav a svg {
-    margin: 0 !important;
+  /* Ensure menu button is always visible and properly sized */
+  header button.lg\:hidden {
+    flex-shrink: 0 !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
   }
 }
 

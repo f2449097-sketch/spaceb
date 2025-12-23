@@ -38,21 +38,32 @@ const FleetDiscovery = () => {
       const make = v?.make || '';
       const model = v?.model || '';
 
-      const absoluteImage = (() => {
-        const imageObj = v?.imageUrl || v?.image;
-        let url;
-        if (imageObj && typeof imageObj === 'object' && imageObj.data) {
-          // Convert Buffer to base64
-          const buffer = imageObj.data.data;
-          url = `data:${imageObj.contentType};base64,` + Buffer.from(buffer).toString('base64');
-        } else {
-          url = imageObj;
+      // Process image URLs - images are now Cloudinary URL strings directly in vehicle.image
+      // Handle both old format (Buffer objects) and new format (URL strings)
+      const getImageUrl = (imageObj) => {
+        if (!imageObj) return null;
+        
+        // If it's an object with data (old Buffer format), return null (can't display)
+        if (typeof imageObj === 'object' && imageObj.data) {
+          return null; // Old format - images need to be re-uploaded
         }
-        if (!url) return undefined;
-        if (/^https?:\/\//i.test(url)) return url;
-        if (/^data:/.test(url)) return url;
-        return `${API_ORIGIN}${url}`;
-      })();
+        
+        // If it's already a URL string (new format), use it directly
+        if (typeof imageObj === 'string') {
+          // Cloudinary URLs are already absolute, use as-is
+          if (/^https?:\/\//i.test(imageObj) || imageObj.startsWith('//')) {
+            return imageObj;
+          }
+          // Relative URLs
+          if (imageObj.startsWith('/')) {
+            return imageObj;
+          }
+        }
+        
+        return null;
+      };
+      
+      const primaryImage = getImageUrl(v?.image || v?.imageUrl);
 
       return {
         id: v?._id || v?.id,
@@ -65,7 +76,21 @@ const FleetDiscovery = () => {
         pricePerDay: v?.price ?? v?.dailyRate,
         originalPrice: v?.originalPrice,
         available: v?.availability ?? v?.available ?? true,
-        images: (v?.images && v.images.length > 0) ? v.images : (absoluteImage ? [absoluteImage] : []),
+        // Images are now URL strings directly in vehicle.images array or vehicle.image
+        images: (() => {
+          // First, try images array (new format - array of URL strings)
+          if (v?.images && Array.isArray(v.images) && v.images.length > 0) {
+            return v.images
+              .map(img => getImageUrl(img))
+              .filter(Boolean); // Remove nulls (old Buffer format)
+          }
+          // Second, try single image field (new format - single URL string)
+          if (primaryImage) {
+            return [primaryImage];
+          }
+          // No images available
+          return [];
+        })(),
         transmission: v?.specifications?.transmission || v?.transmission,
         passengers: v?.specifications?.seats ?? v?.passengers,
         fuelType: v?.specifications?.fuelType || v?.fuelType,

@@ -59,17 +59,17 @@ const Header = () => {
     >
       <div className="h-safe-area w-full bg-inherit" />
       <div className="w-full">
-        <div className="flex items-center justify-between h-14 sm:h-16 px-3 sm:px-6 lg:px-8">
-          {/* Logo */}
+        <div className="flex items-center justify-between h-14 sm:h-16 px-3 sm:px-6 lg:px-8 gap-2">
+          {/* Logo - More compact on mobile */}
           <Link 
             to="/homepage" 
-            className="flex items-center space-x-2 sm:space-x-3 group brand-transition hover:scale-105"
+            className="flex items-center space-x-1.5 sm:space-x-3 group brand-transition hover:scale-105 flex-shrink-0 min-w-0"
           >
-            <div className="relative">
-              <Logo className="group-hover:stellar-glow brand-transition rounded-lg" />
+            <div className="relative flex-shrink-0">
+              <Logo className="group-hover:stellar-glow brand-transition rounded-lg w-8 h-8 sm:w-10 sm:h-10" />
             </div>
-            <div className="flex flex-col">
-              <span className="text-lg sm:text-xl font-bold text-cosmic-depth font-inter tracking-tight">
+            <div className="flex flex-col min-w-0">
+              <span className="text-sm sm:text-lg lg:text-xl font-bold text-cosmic-depth font-inter tracking-tight truncate">
                 SpaceBorne
               </span>
               <span className="text-xs text-text-refined font-medium -mt-1 hidden sm:block">
@@ -78,9 +78,9 @@ const Header = () => {
             </div>
           </Link>
 
-          {/* Desktop Navigation - Hidden on admin pages */}
+          {/* Desktop Navigation - Hidden on admin pages and mobile */}
           {!isAdminPage && (
-            <nav className="hidden lg:flex items-center gap-2">
+            <nav className="hidden lg:flex items-center gap-2 flex-shrink-0">
               {navigationItems?.map((item) => (
                 <Link
                   key={item?.path}
@@ -138,20 +138,48 @@ const Header = () => {
             </nav>
           )}
 
-          {/* Mobile Quick Access Menu Button - Hidden since we show desktop nav */}
-          <Button
-            variant="ghost"
-            size="sm"
-            iconName={isMenuOpen ? "X" : "Menu"}
-            className="lg:hidden text-text-charcoal hover:text-cosmic-depth min-h-[44px] min-w-[44px]"
-            onClick={toggleMenu}
-          />
+          {/* Mobile Quick Access Menu Button - Always visible on mobile */}
+          {!isAdminPage && (
+            <Button
+              variant="ghost"
+              size="sm"
+              iconName={isMenuOpen ? "X" : "Menu"}
+              className="lg:hidden text-text-charcoal hover:text-cosmic-depth min-h-[44px] min-w-[44px] flex-shrink-0"
+              onClick={toggleMenu}
+              aria-label="Toggle menu"
+            />
+          )}
         </div>
+        
+        {/* Mobile Horizontal Navigation - Just below logo as requested */}
+        {!isAdminPage && (
+          <div className="lg:hidden w-full overflow-x-auto scrollbar-none border-t border-gray-100 bg-white/50 backdrop-blur-sm">
+            <div className="flex items-center px-4 py-2 gap-3 min-w-max">
+              {navigationItems?.map((item) => (
+                <Link
+                  key={item?.path}
+                  to={item?.path}
+                  className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap brand-transition border ${
+                    item?.label === 'Book Now'
+                      ? 'bg-adventure-orange text-white border-adventure-orange shadow-sm'
+                      : isActivePath(item?.path)
+                        ? 'bg-gray-900 text-white border-gray-900 shadow-sm'
+                        : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300'
+                  }`}
+                >
+                  <Icon name={item?.icon} size={14} />
+                  <span>{item?.label}</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
 
-        {/* Mobile Navigation - Hidden since we show desktop nav on all screens */}
+        {/* Mobile Navigation Menu Overlay (Kept as backup or for more options if needed) */}
         <div 
-          className={`hidden fixed inset-0 bg-black/80 backdrop-blur-lg z-50 brand-transition ${
-            isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
+          className={`lg:hidden fixed inset-0 bg-black/80 backdrop-blur-lg z-50 brand-transition ${
+            isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'
           }`}
           onClick={() => setIsMenuOpen(false)}
         >
@@ -209,7 +237,6 @@ const Header = () => {
               </Link>
             </div>
           </nav>
-        </div>
         </div>
       </div>
     </header>
