@@ -11,7 +11,7 @@ const PSVProfessionalServices = React.lazy(() => import('./pages/psv-professiona
 const InstantBookingFlow = React.lazy(() => import('./pages/instant-booking-flow'));
 const Confirmation = React.lazy(() => import('./pages/instant-booking-flow/Confirmation'));
 const BookingSuccess = React.lazy(() => import('./pages/BookingSuccess'));
-
+const MpesaPay = React.lazy(() => import('./pages/mpesa-pay'));
 const CustomerRegistration = React.lazy(() => import('./pages/customer-registration'));
 const AdminLogin = React.lazy(() => import('./pages/admin-login'));
 const AdminCommandCenter = React.lazy(() => import('./pages/admin-command-center'));
@@ -39,7 +39,7 @@ const Routes = () => {
             <Route path="/instant-booking-flow" element={<InstantBookingFlow />} />
             <Route path="/booking-confirmation" element={<Confirmation />} />
             <Route path="/booking-success" element={<BookingSuccess />} />
-
+            <Route path="/mpesa-pay" element={<MpesaPay />} />
             <Route path="/customer-registration" element={<CustomerRegistration />} />
             
             {/* Admin Routes */}

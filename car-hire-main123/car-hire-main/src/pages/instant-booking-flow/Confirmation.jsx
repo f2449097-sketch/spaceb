@@ -1,12 +1,11 @@
 import React from 'react';
-import { useLocation, Link, useNavigate } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import Header from '../../components/ui/Header';
 import Button from '../../components/ui/Button';
 import { API_BASE_URL } from '../../config/api';
 
 const Confirmation = () => {
   const { state } = useLocation();
-  const navigate = useNavigate();
   
   // Extract booking details from state
   const bookingData = state?.bookingData || {};
@@ -53,12 +52,9 @@ const Confirmation = () => {
           </div>
 
           <div className="border-t pt-6 space-y-4">
-            <h2 className="text-lg font-semibold">Next Steps:</h2>
+            <h2 className="text-lg font-semibold">Contact Us to Confirm:</h2>
             
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <p className="text-blue-800 font-medium mb-2">Contact us to complete your booking:</p>
-              <p className="text-sm text-blue-700">Our team will reach out to you shortly to confirm payment details and finalize your booking.</p>
-            </div>
+
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <a href={waUrl} target="_blank" rel="noreferrer">
@@ -77,6 +73,8 @@ const Confirmation = () => {
           </div>
         </div>
       </main>
+      
+
     </div>
   );
 };

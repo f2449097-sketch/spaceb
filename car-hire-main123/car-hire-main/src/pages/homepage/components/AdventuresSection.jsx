@@ -233,7 +233,7 @@ const AdventuresSection = () => {
                     iconPosition="left"
                     className="bg-adventure-orange hover:bg-adventure-orange/90 text-white"
                   >
-                    Book Adventure
+                    View Adventure
                   </Button>
                 </Link>
                 <Button

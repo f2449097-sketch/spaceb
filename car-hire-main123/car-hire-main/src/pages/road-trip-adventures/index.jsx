@@ -183,7 +183,7 @@ const RoadTripAdventures = () => {
                             size="sm"
                             onClick={() => handleReserveNow(adventure)}
                             disabled={adventure.availableSeats === 0}
-                            className="w-full text-xs py-2 bg-cosmic-depth text-white hover:bg-cosmic-depth/90 transition-all disabled:bg-gray-400 disabled:cursor-not-allowed"
+                            className="w-full text-xs py-2 bg-adventure-orange hover:bg-adventure-orange/90 text-white font-semibold shadow-sm disabled:bg-gray-400 disabled:cursor-not-allowed"
                           >
                             <Icon name="Calendar" size={12} className="mr-1" />
                             Book Now

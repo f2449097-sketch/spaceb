@@ -138,23 +138,31 @@ const Header = () => {
             </nav>
           )}
 
+          {/* Hamburger menu removed - using horizontal navigation only */}
         </div>
         
         {/* Mobile Horizontal Navigation - Just below logo as requested */}
         {!isAdminPage && (
           <div className="lg:hidden w-full overflow-x-auto scrollbar-none border-t border-gray-100 bg-white/50 backdrop-blur-sm">
-            <div className="flex items-center px-3 py-2 gap-2 min-w-max pr-4">
+            <div className="flex items-center px-3 py-2.5 gap-2.5 min-w-max pr-4">
               {navigationItems?.map((item) => (
                 <Link
                   key={item?.path}
                   to={item?.path}
-                  className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap brand-transition border flex-shrink-0 ${
+                  className={`flex items-center space-x-1.5 px-3.5 py-2 rounded-full text-xs font-medium whitespace-nowrap brand-transition border flex-shrink-0 ${
                     item?.label === 'Book Now'
                       ? 'bg-adventure-orange text-white border-adventure-orange shadow-sm'
                       : isActivePath(item?.path)
                         ? 'bg-gray-900 text-white border-gray-900 shadow-sm'
                         : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300'
                   }`}
+                  onClick={() => {
+                    if (location?.pathname?.startsWith('/admin-command-center') && !item?.path?.startsWith('/admin-command-center')) {
+                      try { sessionStorage.removeItem('admin_token'); } catch (e) {}
+                      try { sessionStorage.removeItem('redirectAfterLogin'); } catch (e) {}
+                      logout();
+                    }
+                  }}
                 >
                   <Icon name={item?.icon} size={14} />
                   <span>{item?.label}</span>
@@ -165,69 +173,7 @@ const Header = () => {
         )}
       </div>
 
-        {/* Mobile Navigation Menu Overlay (Kept as backup or for more options if needed) */}
-        <div 
-          className={`lg:hidden fixed inset-0 bg-black/80 backdrop-blur-lg z-50 brand-transition ${
-            isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'
-          }`}
-          onClick={() => setIsMenuOpen(false)}
-        >
-          <div 
-            className={`absolute right-0 top-0 bottom-0 w-[85%] max-w-sm bg-white shadow-2xl brand-transition transform ${
-              isMenuOpen ? 'translate-x-0' : 'translate-x-full'
-            }`}
-            onClick={e => e.stopPropagation()}
-          >
-            <div className="h-16 px-6 flex items-center justify-between border-b border-gray-100">
-              <span className="text-xl font-semibold text-cosmic-depth">Menu</span>
-              <Button
-                variant="ghost"
-                size="sm"
-                iconName="X"
-                className="text-gray-500 hover:text-cosmic-depth w-10 h-10 flex items-center justify-center"
-                onClick={() => setIsMenuOpen(false)}
-              />
-            </div>
-            <nav className="px-4 py-6 space-y-3 overflow-y-auto max-h-[calc(100vh-4rem)]">
-            {navigationItems?.map((item) => (
-              <Link
-                key={item?.path}
-                to={item?.path}
-                onClick={() => setIsMenuOpen(false)}
-                className={`flex items-center space-x-3 px-5 py-4 rounded-xl brand-transition font-medium relative overflow-hidden min-h-[52px] ${item?.label === 'Book Now' 
-                  ? 'bg-adventure-orange text-white shadow-lg shadow-adventure-orange/20' 
-                  : isActivePath(item?.path)
-                    ? 'bg-gray-100 text-cosmic-depth font-semibold' 
-                    : 'text-gray-700 hover:bg-gray-50 hover:text-cosmic-depth'
-                }`}
-              >
-                <div className="relative z-10 flex items-center space-x-3">
-                  <Icon name={item?.icon} size={20} strokeWidth={2} className="flex-shrink-0" />
-                  <span className="text-base">{item?.label}</span>
-                </div>
-                {isActivePath(item?.path) && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-cosmic-silver/20 to-transparent opacity-50" />
-                )}
-              </Link>
-            ))}
-            
-            <div className="pt-4">
-              <Link to="/instant-booking-flow">
-                <Button
-                  variant="default"
-                  fullWidth
-                  iconName="ArrowRight"
-                  iconPosition="right"
-                  className="bg-adventure-orange hover:bg-adventure-orange/90 text-white"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Start Your Journey
-                </Button>
-              </Link>
-            </div>
-          </nav>
-        </div>
-      </div>
+        {/* Mobile menu overlay removed - using horizontal navigation only */}
     </header>
   );
 };

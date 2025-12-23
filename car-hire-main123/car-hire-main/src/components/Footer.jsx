@@ -55,7 +55,7 @@ const Footer = () => {
                 </div>
               </a>
 
-              <a href="https://www.google.com/maps/search/Westlands+Business+Centre,+Nairobi,+Kenya" target="_blank" rel="noopener noreferrer" className="block group">
+              <a href="https://www.google.com/maps/search/Machakos,+Kenya" target="_blank" rel="noopener noreferrer" className="block group">
                 <div className="flex items-center space-x-3 sm:space-x-4 p-3 sm:p-4 bg-white/5 rounded-lg transition-all duration-300 hover:bg-white/10">
                   <div className="p-2 sm:p-3 bg-cosmic-gold/10 rounded-full group-hover:bg-cosmic-gold/20 transition-all duration-300">
                     <svg className="w-5 h-5 sm:w-6 sm:h-6 text-cosmic-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -65,8 +65,8 @@ const Footer = () => {
                   </div>
                   <div>
                     <div className="text-xs sm:text-sm text-cosmic-silver">Headquarters</div>
-                    <div className="font-medium text-sm sm:text-base">Westlands Business Centre</div>
-                    <div className="text-xs sm:text-sm text-cosmic-silver">Nairobi, Kenya</div>
+                    <div className="font-medium text-sm sm:text-base">Machakos</div>
+                    <div className="text-xs sm:text-sm text-cosmic-silver">Kenya</div>
                   </div>
                 </div>
               </a>
