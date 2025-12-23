@@ -145,16 +145,14 @@ const Header = () => {
         {!isAdminPage && (
           <div className="lg:hidden w-full overflow-x-auto scrollbar-none border-t border-gray-100 bg-white backdrop-blur-sm">
             <div className="flex items-center px-3 py-2.5 gap-2.5 min-w-max pr-6">
-              {navigationItems?.map((item) => (
+              {navigationItems?.filter(item => item.label !== 'Book Now').map((item) => (
                 <Link
                   key={item?.path}
                   to={item?.path}
                   className={`flex items-center space-x-1.5 px-3.5 py-2 rounded-full text-xs font-medium whitespace-nowrap brand-transition border flex-shrink-0 ${
-                    item?.label === 'Book Now'
-                      ? 'bg-adventure-orange text-white border-adventure-orange shadow-sm'
-                      : isActivePath(item?.path)
-                        ? 'bg-gray-900 text-white border-gray-900 shadow-sm'
-                        : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300'
+                    isActivePath(item?.path)
+                      ? 'bg-gray-900 text-white border-gray-900 shadow-sm'
+                      : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300'
                   }`}
                   onClick={() => {
                     if (location?.pathname?.startsWith('/admin-command-center') && !item?.path?.startsWith('/admin-command-center')) {
