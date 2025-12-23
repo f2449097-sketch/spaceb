@@ -3,7 +3,7 @@
 
 [build.environment]
   # Node version for build and runtime
-  NODE_VERSION = "18"
+  NODE_VERSION = "20"
   # Force npm to install ALL dependencies (including devDependencies) during build
   NPM_CONFIG_PRODUCTION = "false"
 
