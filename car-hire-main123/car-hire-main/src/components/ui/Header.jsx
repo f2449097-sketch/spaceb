@@ -143,8 +143,8 @@ const Header = () => {
         
         {/* Mobile Horizontal Navigation - Just below logo as requested */}
         {!isAdminPage && (
-          <div className="lg:hidden w-full overflow-x-auto scrollbar-none border-t border-gray-100 bg-white/50 backdrop-blur-sm">
-            <div className="flex items-center px-3 py-2.5 gap-2.5 min-w-max pr-4">
+          <div className="lg:hidden w-full overflow-x-auto scrollbar-none border-t border-gray-100 bg-white backdrop-blur-sm">
+            <div className="flex items-center px-3 py-2.5 gap-2.5 min-w-max pr-6">
               {navigationItems?.map((item) => (
                 <Link
                   key={item?.path}
