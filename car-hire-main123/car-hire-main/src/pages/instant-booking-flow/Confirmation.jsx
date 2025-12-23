@@ -1,14 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import Header from '../../components/ui/Header';
 import Button from '../../components/ui/Button';
-import MpesaPayment from '../../components/MpesaPayment';
 import { API_BASE_URL } from '../../config/api';
 
 const Confirmation = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
-  const [showPayment, setShowPayment] = useState(false);
   
   // Extract booking details from state
   const bookingData = state?.bookingData || {};
@@ -23,36 +21,7 @@ const Confirmation = () => {
   
   const accountReference = `BOOKING_${bookingData._id || Date.now()}`;
 
-  const handlePaymentSuccess = async (paymentData) => {
-    // Payment successful - update booking status
-    try {
-      const endpoint = bookingType === 'adventure' 
-        ? `${API_BASE_URL}/adventure-bookings/${bookingData._id}`
-        : `${API_BASE_URL}/bookings/${bookingData._id}`;
-      
-      await fetch(endpoint, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          status: 'confirmed',
-          paymentStatus: 'paid',
-          paymentReference: paymentData.checkoutRequestId,
-          paymentDate: new Date().toISOString()
-        })
-      });
-      
-      alert('🎉 Payment successful! Your booking is confirmed.');
-      navigate('/booking-success', { 
-        state: { 
-          bookingId: bookingData._id,
-          amount: totalAmount 
-        }
-      });
-    } catch (error) {
-      console.error('Error updating booking:', error);
-      alert('Payment received but booking update failed. Please contact support.');
-    }
-  };
+
 
   const waNumber = '254759477359';
   const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(`Hi, I want to confirm my booking for ${displayName} worth KES ${totalAmount}.`)}`;
@@ -84,18 +53,11 @@ const Confirmation = () => {
           </div>
 
           <div className="border-t pt-6 space-y-4">
-            <h2 className="text-lg font-semibold">Complete Your Payment:</h2>
+            <h2 className="text-lg font-semibold">Next Steps:</h2>
             
-            <Button 
-              variant="default" 
-              onClick={() => setShowPayment(true)} 
-              className="w-full bg-green-600 hover:bg-green-700 text-lg py-4"
-            >
-              📱 Pay Now with M-Pesa - {formatPrice(totalAmount)}
-            </Button>
-            
-            <div className="text-center text-sm text-gray-500">
-              <p>or contact us directly:</p>
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <p className="text-blue-800 font-medium mb-2">Contact us to complete your booking:</p>
+              <p className="text-sm text-blue-700">Our team will reach out to you shortly to confirm payment details and finalize your booking.</p>
             </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -115,18 +77,6 @@ const Confirmation = () => {
           </div>
         </div>
       </main>
-      
-      {/* M-Pesa Payment Modal */}
-      {showPayment && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <MpesaPayment
-            amount={totalAmount}
-            accountReference={accountReference}
-            onSuccess={handlePaymentSuccess}
-            onCancel={() => setShowPayment(false)}
-          />
-        </div>
-      )}
     </div>
   );
 };

@@ -5,14 +5,12 @@ import HeroSection from './components/HeroSection';
 import Footer from '../../components/Footer';
 import Icon from '../../components/AppIcon';
 import Button from '../../components/ui/Button';
-import MpesaPayment from '../../components/MpesaPayment';
 import { API_BASE_URL } from '../../config/api';
 
 const RoadTripAdventures = () => {
   const navigate = useNavigate();
   const [adventures, setAdventures] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [paymentModal, setPaymentModal] = useState({ show: false, adventure: null });
 
   useEffect(() => {
     fetchAdventures();
@@ -53,15 +51,7 @@ const RoadTripAdventures = () => {
     }
   };
 
-  const handlePayNow = (adventure) => {
-    // Check if adventure is fully booked
-    if (adventure.availableSeats === 0) {
-      alert('Sorry, this adventure is fully booked. Please choose another adventure.');
-      return;
-    }
-    
-    setPaymentModal({ show: true, adventure });
-  };
+
 
   const handleReserveNow = (adventure) => {
     // Check if adventure is fully booked
@@ -87,39 +77,7 @@ const RoadTripAdventures = () => {
     });
   };
 
-  const handlePaymentSuccess = async (paymentData) => {
-    console.log('Payment successful:', paymentData);
-    try {
-      const adventure = paymentModal.adventure;
-      const response = await fetch(`${API_BASE_URL}/adventure-bookings`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          adventureId: adventure._id,
-          adventureTitle: adventure.title,
-          adventureLocation: adventure.location,
-          adventurePrice: adventure.price,
-          numberOfParticipants: 1, // Default to 1 person
-          firstName: 'Paid',
-          lastName: 'Customer',
-          phoneNumber: '0700000000',
-          email: 'payment@confirmed.com',
-          status: 'paid',
-          paymentReference: paymentData.checkoutRequestId
-        })
-      });
-      
-      if (response.ok) {
-        setPaymentModal({ show: false, adventure: null });
-        alert('Payment successful! Your adventure booking has been confirmed. We will contact you shortly.');
-      }
-    } catch (error) {
-      console.error('Booking error:', error);
-      alert('Payment received but booking failed. Please contact us with your payment reference.');
-    }
-  };
+
 
   return (
     <div className="min-h-screen bg-surface-premium">
@@ -223,22 +181,12 @@ const RoadTripAdventures = () => {
                           <Button
                             variant="default"
                             size="sm"
-                            onClick={() => handlePayNow(adventure)}
-                            disabled={adventure.availableSeats === 0}
-                            className="bg-green-600 hover:bg-green-700 w-full text-xs py-2 text-white font-semibold shadow-sm disabled:bg-gray-400 disabled:cursor-not-allowed"
-                          >
-                            <Icon name="CreditCard" size={12} className="mr-1" />
-                            Pay & Book Now
-                          </Button>
-                          <Button
-                            variant="outline"
-                            size="sm"
                             onClick={() => handleReserveNow(adventure)}
                             disabled={adventure.availableSeats === 0}
-                            className="w-full text-xs py-2 border-2 border-cosmic-depth text-cosmic-depth hover:bg-cosmic-depth hover:text-white transition-all disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed"
+                            className="w-full text-xs py-2 bg-cosmic-depth text-white hover:bg-cosmic-depth/90 transition-all disabled:bg-gray-400 disabled:cursor-not-allowed"
                           >
                             <Icon name="Calendar" size={12} className="mr-1" />
-                            Reserve Now
+                            Book Now
                           </Button>
                           {adventure.availableSeats <= 3 && adventure.availableSeats > 0 && (
                             <p className="text-xs text-orange-600 font-semibold text-center">
@@ -289,17 +237,7 @@ const RoadTripAdventures = () => {
         )}
       </main>
       
-      {/* Payment Modal */}
-      {paymentModal.show && paymentModal.adventure && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fadeIn">
-          <MpesaPayment
-            amount={paymentModal.adventure.price}
-            accountReference={`ADV-${paymentModal.adventure._id?.slice(-8)}`}
-            onSuccess={handlePaymentSuccess}
-            onCancel={() => setPaymentModal({ show: false, adventure: null })}
-          />
-        </div>
-      )}
+
 
       {/* Footer */}
       <Footer />

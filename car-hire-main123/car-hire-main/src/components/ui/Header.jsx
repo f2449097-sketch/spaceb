@@ -138,28 +138,17 @@ const Header = () => {
             </nav>
           )}
 
-          {/* Mobile Quick Access Menu Button - Always visible on mobile */}
-          {!isAdminPage && (
-            <Button
-              variant="ghost"
-              size="sm"
-              iconName={isMenuOpen ? "X" : "Menu"}
-              className="lg:hidden text-text-charcoal hover:text-cosmic-depth min-h-[44px] min-w-[44px] flex-shrink-0"
-              onClick={toggleMenu}
-              aria-label="Toggle menu"
-            />
-          )}
         </div>
         
         {/* Mobile Horizontal Navigation - Just below logo as requested */}
         {!isAdminPage && (
           <div className="lg:hidden w-full overflow-x-auto scrollbar-none border-t border-gray-100 bg-white/50 backdrop-blur-sm">
-            <div className="flex items-center px-4 py-2 gap-3 min-w-max">
+            <div className="flex items-center px-3 py-2 gap-2 min-w-max pr-4">
               {navigationItems?.map((item) => (
                 <Link
                   key={item?.path}
                   to={item?.path}
-                  className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap brand-transition border ${
+                  className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap brand-transition border flex-shrink-0 ${
                     item?.label === 'Book Now'
                       ? 'bg-adventure-orange text-white border-adventure-orange shadow-sm'
                       : isActivePath(item?.path)
