@@ -4,9 +4,10 @@
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3001';
 
 // For Netlify deployment, use relative URLs in production
-// In development, use full URL to avoid CORS issues
-export const API_BASE_URL = import.meta.env.DEV ? 'http://localhost:3001/api' : '/api';
-export const UPLOADS_URL = import.meta.env.DEV ? 'http://localhost:3001' : '';
+// In development, use full URL to avoid CORS issues, but support LAN IP
+const DEV_HOST = typeof window !== 'undefined' ? window.location.hostname : 'localhost';
+export const API_BASE_URL = import.meta.env.DEV ? `http://${DEV_HOST}:3001/api` : '/api';
+export const UPLOADS_URL = import.meta.env.DEV ? `http://${DEV_HOST}:3001` : '';
 
 // Log the API URLs for debugging
 console.log('Backend URL:', BACKEND_URL);

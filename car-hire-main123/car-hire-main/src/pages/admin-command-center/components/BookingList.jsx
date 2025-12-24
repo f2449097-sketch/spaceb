@@ -3,6 +3,8 @@ import { API_BASE_URL } from '../../../config/api';
 import Icon from '../../../components/AppIcon';
 import Button from '../../../components/ui/Button';
 import ConfirmDialog from '../../../components/ui/ConfirmDialog';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 const BookingList = () => {
   const [bookings, setBookings] = useState([]);
@@ -62,7 +64,7 @@ const BookingList = () => {
     } else {
       return booking.status === 'approved';
     }
-  });
+  }).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
   // Handle booking approval
   const handleApprove = async (bookingId, isAdventure = false) => {
@@ -72,13 +74,13 @@ const BookingList = () => {
       console.log('Approving booking:', bookingId);
       console.log('API URL:', `${API_BASE_URL}/${endpoint}/${bookingId}/approve`);
       
-      const adminEmail = sessionStorage.getItem('admin_email') || 'Admin';
+      const adminName = sessionStorage.getItem('admin_username') || sessionStorage.getItem('admin_email') || 'Admin';
       const response = await fetch(`${API_BASE_URL}/${endpoint}/${bookingId}/approve`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ approvedBy: adminEmail })
+        body: JSON.stringify({ approvedBy: adminName })
       });
 
       console.log('Response status:', response.status);
@@ -117,14 +119,14 @@ const BookingList = () => {
     setIsProcessing(true);
     try {
       const endpoint = rejectDialog.isAdventure ? 'adventure-bookings' : 'bookings';
-      const adminEmail = sessionStorage.getItem('admin_email') || 'Admin';
+      const adminName = sessionStorage.getItem('admin_username') || sessionStorage.getItem('admin_email') || 'Admin';
       const response = await fetch(`${API_BASE_URL}/${endpoint}/${rejectDialog.bookingId}/reject`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ 
-          rejectedBy: adminEmail,
+          rejectedBy: adminName,
           rejectionReason: rejectDialog.reason 
         })
       });
@@ -323,14 +325,69 @@ const BookingList = () => {
             {filteredBookings.length} {filteredBookings.length === 1 ? 'booking' : 'bookings'} found
           </p>
         </div>
-        <Button
-          variant="outline"
-          onClick={fetchAllBookings}
-          className="flex items-center gap-2"
-        >
-          <Icon name="RefreshCcw" className="w-4 h-4" />
-          Refresh List
-        </Button>
+        <div className="flex gap-3">
+          {activeTab === 'history' && filteredBookings.length > 0 && (
+            <Button
+              variant="outline"
+              onClick={() => {
+                const doc = new jsPDF();
+                
+                // Add header
+                doc.setFontSize(20);
+                doc.setTextColor(40, 40, 40);
+                doc.text('Confirmed Bookings Report', 14, 22);
+                
+                doc.setFontSize(10);
+                doc.text(`Generated on: ${new Date().toLocaleString()}`, 14, 30);
+                doc.text(`Type: ${bookingType === 'vehicle' ? 'Vehicle Bookings' : 'Adventure Bookings'}`, 14, 35);
+
+                // Prepare table data
+                const tableColumn = ["Date", "Customer", "Item", "Amount (KES)", "Status"];
+                const tableRows = filteredBookings.map(booking => [
+                  new Date(booking.createdAt).toLocaleDateString(),
+                  `${booking.firstName} ${booking.lastName}\n${booking.phoneNumber}`,
+                  bookingType === 'vehicle' 
+                    ? `${booking.vehicleMake} ${booking.vehicleModel}`
+                    : booking.adventureTitle,
+                  (bookingType === 'vehicle' ? booking.vehiclePrice : booking.adventurePrice)?.toLocaleString() || '0',
+                  booking.status.toUpperCase()
+                ]);
+
+                // Generate table
+                autoTable(doc, {
+                  head: [tableColumn],
+                  body: tableRows,
+                  startY: 40,
+                  theme: 'grid',
+                  headStyles: { fillColor: [22, 163, 74] }, // Green header
+                  styles: { fontSize: 8 },
+                  columnStyles: {
+                    0: { cellWidth: 25 },
+                    1: { cellWidth: 40 },
+                    2: { cellWidth: 60 },
+                    3: { cellWidth: 30 },
+                    4: { cellWidth: 25 }
+                  }
+                });
+
+                // Save PDF
+                doc.save(`confirmed-bookings-${new Date().toISOString().split('T')[0]}.pdf`);
+              }}
+              className="flex items-center gap-2 bg-green-50 text-green-700 border-green-200 hover:bg-green-100"
+            >
+              <Icon name="Download" className="w-4 h-4" />
+              Download PDF
+            </Button>
+          )}
+          <Button
+            variant="outline"
+            onClick={fetchAllBookings}
+            className="flex items-center gap-2"
+          >
+            <Icon name="RefreshCcw" className="w-4 h-4" />
+            Refresh List
+          </Button>
+        </div>
       </div>
 
       {/* Reject Dialog */}
@@ -527,21 +584,29 @@ const BookingList = () => {
                         </div>
                       )}
                       <div className="flex flex-col gap-2 mt-4">
-                        <Button
-                          variant="primary"
-                          onClick={() => {
-                            if (booking.email) {
-                              const subject = `Booking Confirmation - ${booking.vehicleName || 'Vehicle'}`;
-                              const body = `Dear ${booking.firstName} ${booking.lastName},\n\nYour booking has been confirmed!\nReference: ${booking._id}`;
-                              window.location.href = `mailto:${booking.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-                            }
-                          }}
-                          className="w-full justify-center"
-                          disabled={!booking.email}
-                        >
-                          <Icon name="Mail" className="w-4 h-4 mr-2" />
-                          Send Confirmation
-                        </Button>
+                        <div className="grid grid-cols-2 gap-2">
+                          <Button
+                            variant="outline"
+                            onClick={() => window.location.href = `tel:${booking.phoneNumber}`}
+                            disabled={!booking.phoneNumber}
+                            className="justify-center border-green-600 text-green-600 hover:bg-green-50"
+                          >
+                            <Icon name="Phone" className="w-4 h-4 mr-2" />
+                            Call
+                          </Button>
+                          <Button
+                            variant="outline"
+                            onClick={() => {
+                              const message = `Hi ${booking.firstName}, your booking for ${booking.vehicleName || booking.adventureTitle || 'Service'} has been confirmed! Ref: ${booking._id}`;
+                              window.location.href = `sms:${booking.phoneNumber}?body=${encodeURIComponent(message)}`;
+                            }}
+                            disabled={!booking.phoneNumber}
+                            className="justify-center border-blue-600 text-blue-600 hover:bg-blue-50"
+                          >
+                            <Icon name="MessageSquare" className="w-4 h-4 mr-2" />
+                            Text
+                          </Button>
+                        </div>
                         <Button
                           variant="destructive"
                           onClick={() => confirmDelete(booking._id, bookingType === 'adventure')}

@@ -54,7 +54,13 @@ const AdminCommandCenter = () => {
     },
     { id: 'system', label: 'System', icon: 'Settings' },
     { id: 'admin', label: 'Admin Users', icon: 'ShieldCheck' }
-  ];
+  ].filter(tab => {
+    // Restrict Customers/Analytics tab to superadmin only
+    if (tab.id === 'customers') {
+      return admin?.role === 'superadmin';
+    }
+    return true;
+  });
 
   // Update time every minute
   React.useEffect(() => {
@@ -274,18 +280,20 @@ const AdminCommandCenter = () => {
               size="sm"
               iconName="AlertTriangle"
               className="shadow-lg w-full sm:w-auto"
+              onClick={() => window.location.href = 'tel:0759477359'}
             >
-              <span className="sm:inline">Emergency</span>
+              <span className="sm:inline">Emergency Support</span>
               <span className="sm:hidden">SOS</span>
             </Button>
             <Button
               variant="default"
               size="sm"
-              iconName="MessageCircle"
+              iconName="PhoneCall"
               className="bg-green-600 hover:bg-green-700 shadow-lg w-full sm:w-auto"
+              onClick={() => window.location.href = 'tel:0759477359'}
             >
-              <span className="sm:inline">Support Chat</span>
-              <span className="sm:hidden">Chat</span>
+              <span className="sm:inline">Call Support: 0759477359</span>
+              <span className="sm:hidden">Call</span>
             </Button>
           </div>
         </div>

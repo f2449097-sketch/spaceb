@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { API_BASE_URL } from '../../../config/api';
 import Icon from '../../../components/AppIcon';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 const CustomerAnalytics = () => {
   const [analytics, setAnalytics] = useState(null);
@@ -94,6 +96,117 @@ const CustomerAnalytics = () => {
     );
   }
 
+  const generatePDF = () => {
+    const doc = new jsPDF();
+    const dateStr = new Date().toLocaleString();
+
+    // Header
+    doc.setFontSize(22);
+    doc.setTextColor(40, 40, 40);
+    doc.text('SpaceBorne Analytics Report', 14, 20);
+    
+    doc.setFontSize(10);
+    doc.setTextColor(100);
+    doc.text(`Generated on: ${dateStr}`, 14, 28);
+    doc.text(`Time Range: ${getTimeRangeLabel()}`, 14, 33);
+
+    let yPos = 45;
+
+    // Key Metrics Summary
+    doc.setFontSize(14);
+    doc.setTextColor(0);
+    doc.text('Key Performance Metrics', 14, yPos);
+    yPos += 10;
+
+    const metrics = [
+      ['Total Bookings', analytics?.totalBookings || '0'],
+      ['Total Revenue', formatCurrency(analytics?.totalRevenue || 0)],
+      ['New Customers', analytics?.newCustomers || '0'],
+      ['Avg Booking Value', formatCurrency(analytics?.averageBookingValue || 0)],
+      ['Approval Rate', `${analytics?.approvalRate?.toFixed(1) || 0}%`],
+      ['Retention Rate', `${analytics?.retentionRate?.toFixed(1) || 0}%`]
+    ];
+
+    autoTable(doc, {
+      startY: yPos,
+      head: [['Metric', 'Value']],
+      body: metrics,
+      theme: 'grid',
+      headStyles: { fillColor: [41, 128, 185] },
+      columnStyles: {
+        0: { fontStyle: 'bold', cellWidth: 80 },
+        1: { cellWidth: 60 }
+      }
+    });
+
+    yPos = doc.lastAutoTable.finalY + 15;
+
+    // Booking Status Breakdown
+    doc.text('Booking Status Breakdown', 14, yPos);
+    yPos += 5;
+    
+    const statusData = analytics?.statusBreakdown?.map(s => [
+      s.status.toUpperCase(),
+      s.count,
+      `${s.percentage.toFixed(1)}%`
+    ]) || [];
+
+    autoTable(doc, {
+      startY: yPos,
+      head: [['Status', 'Count', 'Percentage']],
+      body: statusData,
+      theme: 'striped',
+      headStyles: { fillColor: [52, 73, 94] }
+    });
+
+    yPos = doc.lastAutoTable.finalY + 15;
+
+    // Popular Vehicles
+    doc.text('Top Performing Vehicles', 14, yPos);
+    yPos += 5;
+
+    const vehicleData = analytics?.popularVehicles?.slice(0, 5).map(v => [
+      v.vehicleName || `${v.vehicleMake} ${v.vehicleModel}`,
+      v.bookings,
+      formatCurrency(v.revenue)
+    ]) || [];
+
+    autoTable(doc, {
+      startY: yPos,
+      head: [['Vehicle', 'Bookings', 'Revenue']],
+      body: vehicleData,
+      theme: 'striped',
+      headStyles: { fillColor: [211, 84, 0] }
+    });
+
+    // Start new page for Recent Bookings if needed
+    doc.addPage();
+    yPos = 20;
+
+    doc.setFontSize(14);
+    doc.text('Recent Bookings Log', 14, yPos);
+    yPos += 5;
+
+    const bookingData = analytics?.recentBookings?.map(b => [
+      new Date(b.createdAt).toLocaleDateString(),
+      `${b.firstName} ${b.lastName}`,
+      b.vehicleName || 'Multiple/Adventure',
+      formatCurrency(b.vehiclePrice || 0),
+      b.status.toUpperCase()
+    ]) || [];
+
+    autoTable(doc, {
+      startY: yPos,
+      head: [['Date', 'Customer', 'Item', 'Amount', 'Status']],
+      body: bookingData,
+      theme: 'grid',
+      headStyles: { fillColor: [39, 174, 96] },
+      styles: { fontSize: 8 }
+    });
+
+    doc.save(`analytics-report-${new Date().toISOString().split('T')[0]}.pdf`);
+  };
+
   return (
     <div className="space-y-6">
       {/* Header with Time Range Selector */}
@@ -103,7 +216,15 @@ const CustomerAnalytics = () => {
             <h2 className="text-2xl font-bold text-gray-900">Customer & Booking Analytics</h2>
             <p className="text-gray-600 mt-1">Real-time insights into your business performance</p>
           </div>
-          <div className="flex items-center space-x-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              onClick={generatePDF}
+              className="px-4 py-2 bg-green-600 text-white rounded-md text-sm font-medium hover:bg-green-700 flex items-center gap-2"
+            >
+              <Icon name="Download" size={16} />
+              Export PDF
+            </button>
+            <div className="h-6 w-px bg-gray-300 mx-2 hidden sm:block"></div>
             {['7days', '30days', '90days', 'all'].map((range) => (
               <button
                 key={range}

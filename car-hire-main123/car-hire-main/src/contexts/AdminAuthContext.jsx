@@ -83,6 +83,7 @@ export const AdminAuthProvider = ({ children }) => {
             // Persist token only in sessionStorage to require re-login on new visits
             try {
                 sessionStorage.setItem('admin_token', data.token);
+                sessionStorage.setItem('admin_username', data.admin.username);
             } catch (e) { /* ignore */ }
             setAdmin(data.admin);
             return true;
@@ -95,6 +96,7 @@ export const AdminAuthProvider = ({ children }) => {
     const logout = () => {
         // Clear all known token keys
         try { sessionStorage.removeItem('admin_token'); } catch (e) { }
+        try { sessionStorage.removeItem('admin_username'); } catch (e) { }
         try { sessionStorage.removeItem('admin_info'); } catch (e) { }
         try { localStorage.removeItem('adminToken'); } catch (e) { }
         try { localStorage.removeItem('admin_token'); } catch (e) { }

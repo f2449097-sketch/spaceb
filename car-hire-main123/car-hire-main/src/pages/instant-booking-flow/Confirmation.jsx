@@ -22,9 +22,9 @@ const Confirmation = () => {
 
 
 
-  const waNumber = '254759477359';
+  const waNumber = '24724440293';
   const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(`Hi, I want to confirm my booking for ${displayName} worth KES ${totalAmount}.`)}`;
-  const telUrl = 'tel:+254759477359';
+  const telUrl = 'tel:+24724440293';
   
   const formatPrice = (price) => {
     return `KES ${Number(price || 0).toLocaleString()}`;

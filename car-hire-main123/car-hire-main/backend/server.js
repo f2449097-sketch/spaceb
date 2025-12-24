@@ -74,8 +74,27 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(morgan('dev'));
 
 // Request logging middleware
+// Request logging and traffic tracking middleware
+global.trafficStats = {
+    totalRequests: 0,
+    startTime: Date.now(),
+    requestsPerMinute: 0,
+    recentRequests: [] // Store timestamps of last 1000 requests to calc RPM
+};
+
 app.use((req, res, next) => {
     console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+    
+    // Traffic tracking
+    global.trafficStats.totalRequests++;
+    const now = Date.now();
+    global.trafficStats.recentRequests.push(now);
+    
+    // Clean up old requests (> 1 min ago)
+    const oneMinuteAgo = now - 60000;
+    global.trafficStats.recentRequests = global.trafficStats.recentRequests.filter(time => time > oneMinuteAgo);
+    global.trafficStats.requestsPerMinute = global.trafficStats.recentRequests.length;
+    
     next();
 });
 
