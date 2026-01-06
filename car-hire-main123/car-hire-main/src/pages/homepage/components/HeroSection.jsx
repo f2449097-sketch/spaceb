@@ -6,8 +6,8 @@ import Button from '../../../components/ui/Button';
 const HeroSection = () => {
   return (
     <section className="relative min-h-screen overflow-hidden bg-cosmic-depth flex items-center justify-center">
-      {/* Background Image - clear and visible */}
-      <div className="absolute inset-0 z-0 bg-[url('/assets/images/audi.jpg')] bg-cover bg-center bg-no-repeat md:bg-none">
+      {/* Background/Backdrop */}
+      <div className="absolute inset-0 z-0 bg-cosmic-depth">
         <picture>
           <source 
             media="(max-width: 768px)" 
@@ -16,10 +16,13 @@ const HeroSection = () => {
           <img
             src="/images/benz.jpg"
             alt="Premium mobility experience"
-            className="hero-image w-full h-full object-contain md:object-cover rounded-3xl shadow-2xl"
+            loading="eager"
+            fetchpriority="high"
+            className="hero-image w-full h-full object-contain md:object-cover rounded-3xl shadow-2xl opacity-0 animate-fade-in"
+            onLoad={(e) => e.target.classList.remove('opacity-0')}
           />
         </picture>
-        <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/5 to-transparent rounded-3xl" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/5 to-transparent rounded-3xl" />
       </div>
 
       {/* Top Left Title & Description */}

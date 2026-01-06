@@ -4,6 +4,8 @@ import { Suspense } from "react";
 import ScrollToTop from "./components/ScrollToTop";
 import ErrorBoundary from "./components/ErrorBoundary";
 import ProtectedRoute from './components/auth/ProtectedRoute';
+import SwipeNavigation from "./components/SwipeNavigation";
+
 const Homepage = React.lazy(() => import('./pages/homepage'));
 const FleetDiscovery = React.lazy(() => import('./pages/fleet-discovery'));
 const RoadTripAdventures = React.lazy(() => import('./pages/road-trip-adventures'));
@@ -24,6 +26,7 @@ const Routes = () => {
     <BrowserRouter>
       <ErrorBoundary>
         <ScrollToTop />
+        <SwipeNavigation />
         <Suspense fallback={
           <div className="flex items-center justify-center min-h-screen bg-white">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-adventure-orange"></div>
