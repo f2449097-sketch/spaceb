@@ -31,7 +31,7 @@ const HeroSection = () => {
           </span>
         </h1>
         <p className="text-white/80 text-sm sm:text-base lg:text-lg font-medium leading-relaxed drop-shadow-lg">
-          Luxury rentals, curated road trips, and professional transport—making every journey extraordinary.
+          Luxury rentals, curated road trips, and PSV transport—making every journey extraordinary.
         </p>
       </div>
 
@@ -40,55 +40,54 @@ const HeroSection = () => {
         {/* Empty space for clean center area */}
       </div>
 
-      {/* Bottom Buttons - Near Space Borne LTD */}
-      <div className="absolute bottom-32 left-8 z-20">
-        {/* Mobile: Stack all buttons, Desktop: 2+1 layout */}
-        <div className="flex flex-col gap-2 sm:gap-3">
-          {/* First row - 2 buttons on desktop, stacked on mobile */}
-          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-            <Link to="/fleet-discovery" className="w-full sm:w-auto">
-              <Button
-                variant="premium"
-                size="sm"
-                iconName="Car"
-                iconPosition="left"
-                className="w-full sm:w-auto py-2 px-4 text-sm font-bold bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg shadow hover:from-orange-600 hover:to-orange-700 transition-all duration-300"
-              >
-                <span className="flex items-center gap-2">
-                  <Icon name="Car" size={16} />
-                  Rent Vehicles
-                </span>
-              </Button>
-            </Link>
-            <Link to="/road-trip-adventures" className="w-full sm:w-auto">
+      {/* Bottom Buttons - Responsive Layout: 1 top (Rent), 2 bottom (Trips, Pro) */}
+      <div className="absolute bottom-24 left-4 right-4 z-20 md:left-8 md:right-auto md:bottom-32 md:w-auto">
+        <div className="flex flex-col gap-3 w-full max-w-md mx-auto md:mx-0">
+          
+          {/* Top: Rent Vehicles (Full Width) */}
+          <Link to="/fleet-discovery" className="w-full">
+            <Button
+              variant="premium"
+              size="lg" // Larger primary CTA
+              iconName="Car"
+              iconPosition="left"
+              className="w-full py-3.5 px-6 text-base font-bold bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl shadow-lg shadow-orange-900/20 hover:from-orange-600 hover:to-orange-700 hover:shadow-orange-500/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
+            >
+              <span className="flex items-center justify-center gap-2.5">
+                <Icon name="Car" size={20} className="stroke-[2.5px]" />
+                Rent Vehicles
+              </span>
+            </Button>
+          </Link>
+
+          {/* Bottom: Road Trips & Professional (Side by Side) */}
+          <div className="grid grid-cols-2 gap-3">
+            <Link to="/road-trip-adventures" className="w-full">
               <Button
                 variant="glass"
                 size="sm"
                 iconName="MapPin"
                 iconPosition="left"
-                className="w-full sm:w-auto py-2 px-4 text-sm font-bold bg-white/20 backdrop-blur-md text-white rounded-lg shadow hover:bg-white/30 transition-all duration-300"
+                className="w-full py-2.5 px-3 text-sm font-semibold bg-white/10 backdrop-blur-md text-white border border-white/20 rounded-xl shadow-lg hover:bg-white/20 hover:border-white/30 active:scale-[0.98] transition-all duration-300"
               >
-                <span className="flex items-center gap-2">
-                  <Icon name="MapPin" size={16} />
+                <span className="flex items-center justify-center gap-2">
+                  <Icon name="MapPin" size={18} />
                   Road Trips
                 </span>
               </Button>
             </Link>
-          </div>
-          
-          {/* Second row - Third button below on desktop */}
-          <div className="flex justify-start">
-            <Link to="/psv-professional-services" className="w-full sm:w-auto">
+            
+            <Link to="/psv-professional-services" className="w-full">
               <Button
                 variant="glass"
                 size="sm"
                 iconName="Briefcase"
                 iconPosition="left"
-                className="w-full sm:w-auto py-2 px-4 text-sm font-bold bg-white/20 backdrop-blur-md text-white rounded-lg shadow hover:bg-white/30 transition-all duration-300"
+                className="w-full py-2.5 px-3 text-sm font-semibold bg-white/10 backdrop-blur-md text-white border border-white/20 rounded-xl shadow-lg hover:bg-white/20 hover:border-white/30 active:scale-[0.98] transition-all duration-300"
               >
-                <span className="flex items-center gap-2">
-                  <Icon name="Briefcase" size={16} />
-                  Chauffeured Services
+                <span className="flex items-center justify-center gap-2">
+                  <Icon name="Briefcase" size={18} />
+                  PSV
                 </span>
               </Button>
             </Link>

@@ -9,7 +9,7 @@ const MobileBottomNav = () => {
     { path: '/homepage', label: 'Home', icon: 'Home' },
     { path: '/fleet-discovery', label: 'Fleet', icon: 'Car' },
     { path: '/road-trip-adventures', label: 'Adventures', icon: 'MapPin' },
-    { path: '/psv-professional-services', label: 'Professional', icon: 'Briefcase' },
+    { path: '/psv-professional-services', label: 'PSV', icon: 'Briefcase' },
     { path: '/instant-booking-flow', label: 'Book', icon: 'Calendar' }
   ];
 

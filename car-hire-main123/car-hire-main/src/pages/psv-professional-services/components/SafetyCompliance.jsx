@@ -7,7 +7,7 @@ const SafetyCompliance = () => {
     {
       icon: "Shield",
       title: "Driver Background Checks",
-      description: "Comprehensive background verification including criminal history, driving records, and professional references for all PSV drivers."
+      description: "Comprehensive background verification including criminal history, driving records, and industry references for all PSV drivers."
     },
     {
       icon: "Wrench",
@@ -63,7 +63,7 @@ const SafetyCompliance = () => {
     },
     {
       name: "Driver Training",
-      description: "Professional chauffeur certification",
+      description: "PSV chauffeur certification",
       icon: "CheckCircle",
       status: "Active"
     },

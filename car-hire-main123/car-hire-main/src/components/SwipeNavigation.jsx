@@ -13,7 +13,7 @@ const SwipeNavigation = () => {
     { path: '/homepage', name: 'Home' },
     { path: '/fleet-discovery', name: 'Fleet' },
     { path: '/road-trip-adventures', name: 'Adventures' },
-    { path: '/psv-professional-services', name: 'Professional' },
+    { path: '/psv-professional-services', name: 'PSV' },
     { path: '/instant-booking-flow', name: 'Book Now' }
   ];
 

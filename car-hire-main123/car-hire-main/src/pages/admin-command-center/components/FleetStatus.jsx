@@ -8,7 +8,7 @@ import { API_BASE_URL } from '../../../config/api';
 const FleetStatus = () => {
   const navigate = useNavigate();
   const [selectedVehicle, setSelectedVehicle] = useState(null);
-  const { vehicles, deleteVehicle, fetchVehicles } = useVehicles();
+  const { vehicles, deleteVehicle, fetchVehicles, toggleAvailability } = useVehicles();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -132,9 +132,12 @@ const FleetStatus = () => {
                   </div>
                 </div>
 
-                {/* Availability Badge */}
-                <div className="absolute bottom-2 right-2">
-                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                {/* Availability Badge/Toggle */}
+                <div className="absolute bottom-2 right-2 flex items-center gap-1 bg-white/90 backdrop-blur-sm rounded-full px-2 py-0.5 shadow-sm border border-gray-100">
+                  <div className={`w-2 h-2 rounded-full ${vehicle.available ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`}></div>
+                  <span className="text-[10px] font-bold text-cosmic-depth uppercase tracking-tighter">
+                    {vehicle.available ? 'Avail' : 'Booked'}
+                  </span>
                 </div>
               </div>
 
@@ -164,9 +167,29 @@ const FleetStatus = () => {
                     size="sm"
                     iconName="Edit"
                     iconPosition="left"
-                    className="bg-cosmic-depth hover:bg-cosmic-depth/90 w-full text-xs py-2"
+                    className="bg-cosmic-depth hover:bg-cosmic-depth/90 w-full text-xs py-2 mb-1"
                   >
                     Edit
+                  </Button>
+
+                  <Button
+                    onClick={async () => {
+                      try {
+                        await toggleAvailability(vid, !vehicle.available);
+                      } catch (err) {
+                        alert('Failed to update availability');
+                      }
+                    }}
+                    variant="outline"
+                    size="sm"
+                    className={`w-full text-xs py-2 border-2 ${
+                      vehicle.available 
+                        ? 'border-red-200 text-red-600 hover:bg-red-50' 
+                        : 'border-green-200 text-green-600 hover:bg-green-50'
+                    }`}
+                  >
+                    <Icon name={vehicle.available ? "XCircle" : "CheckCircle"} size={12} className="mr-1 inline" />
+                    {vehicle.available ? 'Mark as Booked' : 'Mark Available'}
                   </Button>
                   
                   {showDeleteConfirm === vid && (

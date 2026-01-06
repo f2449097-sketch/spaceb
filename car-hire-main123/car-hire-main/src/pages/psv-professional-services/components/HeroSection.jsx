@@ -13,7 +13,7 @@ const HeroSection = () => {
           <source media="(min-width: 768px)" srcSet="/assets/images/luxury%202.jpg" />
           <img
             src="/assets/images/luxury.jpg"
-            alt="Professional Mercedes Benz executive transportation"
+            alt="PSV Mercedes Benz executive transportation"
             className="w-full h-full object-cover"
             onError={(e) => {
               console.log('Benz image failed to load, using fallback');

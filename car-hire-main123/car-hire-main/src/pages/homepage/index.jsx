@@ -20,7 +20,7 @@ const Homepage = () => {
         <title>SpaceBorne - Premium Mobility Experiences | Luxury Car Rentals & Road Trip Adventures</title>
         <meta 
           name="description" 
-          content="Transform your journey with SpaceBorne's premium mobility services. Luxury vehicle rentals, curated road trip adventures, and professional PSV services. Every journey deserves to be extraordinary." 
+          content="Transform your journey with SpaceBorne's premium mobility services. Luxury vehicle rentals, curated road trip adventures, and premium PSV services. Every journey deserves to be extraordinary." 
         />
         <meta 
           name="keywords" 
@@ -30,7 +30,7 @@ const Homepage = () => {
         <meta property="og:title" content="SpaceBorne - Premium Mobility Experiences" />
         <meta 
           property="og:description" 
-          content="Discover extraordinary journeys with SpaceBorne's premium mobility solutions. Luxury rentals, curated adventures, and professional services." 
+          content="Discover extraordinary journeys with SpaceBorne's premium mobility solutions. Luxury rentals, curated adventures, and premium PSV services." 
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://gmail.com/Spacebornentreprices" />

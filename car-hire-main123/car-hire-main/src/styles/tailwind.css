@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap');
-@import './universal-layout.css';
+/* universal-layout.css import removed */
 
 @tailwind base;
 @tailwind components;
@@ -9,75 +9,113 @@
 @layer base {
   :root {
     /* Core System Colors */
-    --color-background: #fafafa; /* gray-50 */
-    --color-foreground: #212121; /* gray-800 */
-    --color-border: #e0e0e0; /* gray-300 */
-    --color-input: #ffffff; /* white */
-    --color-ring: #1a237e; /* indigo-900 */
-    
+    --color-background: #fafafa;
+    /* gray-50 */
+    --color-foreground: #212121;
+    /* gray-800 */
+    --color-border: #e0e0e0;
+    /* gray-300 */
+    --color-input: #ffffff;
+    /* white */
+    --color-ring: #1a237e;
+    /* indigo-900 */
+
     /* Card & Surface Colors */
-    --color-card: #ffffff; /* white */
-    --color-card-foreground: #212121; /* gray-800 */
-    --color-popover: #ffffff; /* white */
-    --color-popover-foreground: #212121; /* gray-800 */
-    
+    --color-card: #ffffff;
+    /* white */
+    --color-card-foreground: #212121;
+    /* gray-800 */
+    --color-popover: #ffffff;
+    /* white */
+    --color-popover-foreground: #212121;
+    /* gray-800 */
+
     /* Muted Colors */
-    --color-muted: #f5f5f5; /* gray-100 */
-    --color-muted-foreground: #757575; /* gray-500 */
-    
+    --color-muted: #f5f5f5;
+    /* gray-100 */
+    --color-muted-foreground: #757575;
+    /* gray-500 */
+
     /* Brand Primary Colors */
-    --color-primary: #1a237e; /* indigo-900 */
-    --color-primary-foreground: #ffffff; /* white */
-    
+    --color-primary: #1a237e;
+    /* indigo-900 */
+    --color-primary-foreground: #ffffff;
+    /* white */
+
     /* Brand Secondary Colors */
-    --color-secondary: #3f51b5; /* indigo-500 */
-    --color-secondary-foreground: #ffffff; /* white */
-    
+    --color-secondary: #3f51b5;
+    /* indigo-500 */
+    --color-secondary-foreground: #ffffff;
+    /* white */
+
     /* Accent Colors */
-    --color-accent: #ffc107; /* amber-500 */
-    --color-accent-foreground: #212121; /* gray-800 */
-    
+    --color-accent: #ffc107;
+    /* amber-500 */
+    --color-accent-foreground: #212121;
+    /* gray-800 */
+
     /* Status Colors */
-    --color-success: #4caf50; /* green-500 */
-    --color-success-foreground: #ffffff; /* white */
-    
-    --color-warning: #ff9800; /* orange-500 */
-    --color-warning-foreground: #ffffff; /* white */
-    
-    --color-error: #f44336; /* red-500 */
-    --color-error-foreground: #ffffff; /* white */
-    
-    --color-destructive: #f44336; /* red-500 */
-    --color-destructive-foreground: #ffffff; /* white */
-    
+    --color-success: #4caf50;
+    /* green-500 */
+    --color-success-foreground: #ffffff;
+    /* white */
+
+    --color-warning: #ff9800;
+    /* orange-500 */
+    --color-warning-foreground: #ffffff;
+    /* white */
+
+    --color-error: #f44336;
+    /* red-500 */
+    --color-error-foreground: #ffffff;
+    /* white */
+
+    --color-destructive: #f44336;
+    /* red-500 */
+    --color-destructive-foreground: #ffffff;
+    /* white */
+
     /* SpaceBorne Brand Colors */
-    --color-cosmic-depth: #1a237e; /* indigo-900 */
-    --color-cosmic-silver: #e8eaf6; /* indigo-50 */
-    --color-stellar-gold: #ffc107; /* amber-500 */
-    --color-adventure-orange: #ff6f00; /* orange-600 */
-    --color-deep-space: #0d47a1; /* blue-800 */
-    --color-surface-premium: #ffffff; /* white */
-    --color-text-charcoal: #212121; /* gray-800 */
-    --color-text-refined: #757575; /* gray-500 */
+    --color-cosmic-depth: #1a237e;
+    /* indigo-900 */
+    --color-cosmic-silver: #e8eaf6;
+    /* indigo-50 */
+    --color-stellar-gold: #ffc107;
+    /* amber-500 */
+    --color-adventure-orange: #ff6f00;
+    /* orange-600 */
+    --color-deep-space: #0d47a1;
+    /* blue-800 */
+    --color-surface-premium: #ffffff;
+    /* white */
+    --color-text-charcoal: #212121;
+    /* gray-800 */
+    --color-text-refined: #757575;
+    /* gray-500 */
   }
-  
+
   * {
     @apply border-border;
   }
-  
+
   body {
     @apply bg-background text-foreground;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-feature-settings: 'cv11', 'ss01';
     font-variation-settings: 'opsz' 32;
   }
-  
-  h1, h2, h3, h4, h5, h6 {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: 'Inter', sans-serif;
     font-weight: 600;
     line-height: 1.2;
   }
-  
+
   .font-accent {
     font-family: 'Playfair Display', serif;
   }
@@ -87,23 +125,23 @@
   .cosmic-gradient {
     background: linear-gradient(135deg, var(--color-cosmic-depth) 0%, var(--color-deep-space) 100%);
   }
-  
+
   .stellar-glow {
     box-shadow: 0 0 20px rgba(255, 193, 7, 0.3);
   }
-  
+
   .premium-shadow {
     box-shadow: 0 4px 12px rgba(26, 35, 126, 0.08);
   }
-  
+
   .deep-shadow {
     box-shadow: 0 8px 24px rgba(26, 35, 126, 0.12);
   }
-  
+
   .brand-transition {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  
+
   .hero-parallax {
     transform: translate3d(0, 0, 0);
     will-change: transform;

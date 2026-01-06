@@ -259,6 +259,48 @@ export const VehicleProvider = ({ children }) => {
     }
   };
 
+  // Toggle vehicle availability
+  const toggleAvailability = async (id, availability) => {
+    setLoading(true);
+    try {
+      const adminToken = sessionStorage.getItem('admin_token');
+      if (!adminToken) {
+        throw new Error('No admin token found. Please login again.');
+      }
+
+      const response = await fetch(`${API_BASE_URL}/vehicles/${id}/availability`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${adminToken}`
+        },
+        body: JSON.stringify({ availability })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || 'Failed to update availability');
+      }
+
+      const result = await response.json();
+      
+      // Update local state
+      setVehicles(prev => prev.map(vehicle => 
+        (vehicle.id === id || vehicle._id === id) 
+          ? { ...vehicle, available: availability } 
+          : vehicle
+      ));
+      
+      return result;
+    } catch (err) {
+      setError(err.message);
+      console.error('Error toggling availability:', err);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Fetch vehicles on component mount
   useEffect(() => {
     fetchVehicles();
@@ -272,7 +314,8 @@ export const VehicleProvider = ({ children }) => {
       addVehicle, 
       updateVehicle, 
       deleteVehicle, 
-      fetchVehicles 
+      fetchVehicles,
+      toggleAvailability 
     }}>
       {children}
     </VehicleContext.Provider>

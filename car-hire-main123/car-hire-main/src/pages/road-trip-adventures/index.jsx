@@ -228,7 +228,7 @@ const RoadTripAdventures = () => {
                     className="inline-flex items-center justify-center px-6 py-3 border border-cosmic-depth text-cosmic-depth rounded-lg hover:bg-cosmic-depth hover:text-white transition-colors"
                   >
                     <Icon name="Briefcase" size={20} className="mr-2" />
-                    Professional Services
+                    PSV Services
                   </a>
             </div>
           </div>

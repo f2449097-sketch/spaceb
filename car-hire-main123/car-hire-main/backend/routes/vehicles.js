@@ -253,6 +253,36 @@ router.put('/:id', authMiddleware, upload.single('image'), async (req, res) => {
     }
 });
 
+// Toggle vehicle availability (admin only)
+router.patch('/:id/availability', authMiddleware, async (req, res) => {
+    try {
+        const { id } = req.params;
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ message: 'Invalid vehicle id' });
+        }
+
+        const vehicle = await Vehicle.findById(id);
+        if (!vehicle) {
+            return res.status(404).json({ message: 'Vehicle not found' });
+        }
+
+        // Toggle the availability
+        vehicle.availability = !vehicle.availability;
+        await vehicle.save();
+
+        console.log(`Vehicle ${id} availability toggled to: ${vehicle.availability}`);
+
+        res.json({ 
+            success: true, 
+            vehicle,
+            message: `Vehicle is now ${vehicle.availability ? 'available' : 'unavailable'}`
+        });
+    } catch (error) {
+        console.error('Error toggling vehicle availability:', error);
+        res.status(500).json({ message: error.message });
+    }
+});
+
 // Helper function to extract Cloudinary public ID from URL
 const getPublicIdFromUrl = (url) => {
     if (!url || !url.includes('cloudinary.com')) return null;

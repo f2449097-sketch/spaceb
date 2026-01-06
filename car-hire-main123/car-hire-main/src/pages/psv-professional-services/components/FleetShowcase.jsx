@@ -47,7 +47,7 @@ const FleetShowcase = () => {
         <div className="text-center mb-8">
           <h2 className="text-4xl lg:text-5xl font-bold text-cosmic-depth mb-2 tracking-tight">Luxury Vehicles</h2>
           <p className="text-lg text-text-refined max-w-2xl mx-auto mb-4 leading-relaxed">
-            Luxury vehicles and SUVs, fully insured and driven by licensed professionals
+            Luxury vehicles and SUVs, fully insured and driven by licensed PSV drivers
           </p>
         </div>
         

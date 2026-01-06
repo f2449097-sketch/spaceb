@@ -38,8 +38,7 @@ const ServiceCategories = () => {
         {/* Section Header */}
         <div className="text-center mb-12">
           <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-cosmic-depth/10 to-stellar-gold/10 backdrop-blur-sm rounded-full px-6 py-3 mb-8 border border-cosmic-depth/20">
-            <div className="w-2 h-2 bg-stellar-gold rounded-full animate-pulse"></div>
-            <span className="text-cosmic-depth font-semibold text-sm tracking-wide">Professional Services</span>
+            <span className="text-cosmic-depth font-semibold text-sm tracking-wide">PSV Services</span>
           </div>
           
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-cosmic-depth mb-6 leading-tight">

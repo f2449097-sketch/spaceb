@@ -23,11 +23,11 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-12">
           {/* Contact Us Section */}
           <div className="transform transition-all duration-300 hover:translate-y-[-5px]">
-            <h2 className="text-xl sm:text-3xl font-bold mb-4 sm:mb-8 bg-clip-text text-transparent bg-gradient-to-r from-cosmic-gold to-amber-400">
+            <h2 className="text-xl sm:text-3xl font-bold mb-4 sm:mb-8 text-white">
               Contact Us
             </h2>
             <div className="space-y-3 sm:space-y-6">
-              <a href="tel:+24724440293" className="block group">
+              <a href="tel:+254724440293" className="block group">
                 <div className="flex items-center space-x-3 sm:space-x-4 p-3 sm:p-4 bg-white/5 rounded-lg transition-all duration-300 hover:bg-white/10">
                   <div className="p-2 sm:p-3 bg-cosmic-gold/10 rounded-full group-hover:bg-cosmic-gold/20 transition-all duration-300">
                     <svg className="w-5 h-5 sm:w-6 sm:h-6 text-cosmic-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -36,7 +36,7 @@ const Footer = () => {
                   </div>
                   <div>
                     <div className="text-xs sm:text-sm text-cosmic-silver">24/7 Support</div>
-                    <div className="font-medium text-sm sm:text-base">+24724440293</div>
+                    <div className="font-medium text-sm sm:text-base">+254724440293</div>
                   </div>
                 </div>
               </a>

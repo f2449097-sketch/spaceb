@@ -12,7 +12,7 @@ import { API_BASE_URL } from '../../config/api';
 
 const FleetDiscovery = () => {
   const navigate = useNavigate();
-  const { vehicles } = useVehicles();
+  const { vehicles, fetchVehicles } = useVehicles();
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState({
     vehicleClass: 'all',
@@ -26,6 +26,10 @@ const FleetDiscovery = () => {
   const [viewMode, setViewMode] = useState('grid');
   const [filteredVehicles, setFilteredVehicles] = useState([]);
 
+  // Refetch vehicles on page load to ensure fresh availability data
+  useEffect(() => {
+    fetchVehicles();
+  }, []);
 
   // Filter and sort vehicles from context
   const processedVehicles = useMemo(() => {
@@ -75,7 +79,7 @@ const FleetDiscovery = () => {
         description: v?.description,
         pricePerDay: v?.price ?? v?.dailyRate,
         originalPrice: v?.originalPrice,
-        available: v?.availability ?? v?.available ?? true,
+        available: v?.available ?? v?.availability ?? false,
         // Images are now URL strings directly in vehicle.images array or vehicle.image
         images: (() => {
           // First, try images array (new format - array of URL strings)

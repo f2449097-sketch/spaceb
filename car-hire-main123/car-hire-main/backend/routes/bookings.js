@@ -383,6 +383,22 @@ router.patch('/:id/approve', async (req, res) => {
         booking.approvedAt = new Date();
         
         await booking.save();
+
+        // Automatically mark vehicle as unavailable if vehicleId is present
+        if (booking.vehicleId) {
+            try {
+                const Vehicle = require('../models/Vehicle');
+                const vehicle = await Vehicle.findById(booking.vehicleId);
+                if (vehicle) {
+                    vehicle.availability = false;
+                    await vehicle.save();
+                    console.log(`Vehicle ${booking.vehicleId} marked as unavailable upon booking approval`);
+                }
+            } catch (vErr) {
+                console.error('Failed to update vehicle availability:', vErr);
+                // We don't fail the whole request if vehicle update fails, but we log it
+            }
+        }
         
         console.log('Booking approved successfully:', id);
         console.log('New booking status:', booking.status);

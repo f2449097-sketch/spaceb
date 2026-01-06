@@ -56,10 +56,10 @@ const ServiceDiscovery = () => {
     },
     {
       id: 3,
-      title: "Professional Transport",
+      title: "PSV Transport",
       description: "Reliable group transport for corporate events and special occasions.",
       image: "/images/Professional Transport.jpg",
-      features: ["Professional Drivers", "Group Events"],
+      features: ["PSV Drivers", "Group Events"],
       route: "/psv-professional-services",
       icon: "Users",
       color: "bg-professional-blue",

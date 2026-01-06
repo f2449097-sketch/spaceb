@@ -105,10 +105,15 @@ const VehicleCard = ({ vehicle, onViewDetails, onBookNow }) => {
           variant="default"
           fullWidth
           size="sm"
-          onClick={(e) => { e?.stopPropagation(); onBookNow(vehicle); }}
-          className="bg-cosmic-depth hover:bg-cosmic-depth/90 text-white text-xs py-2"
+          onClick={(e) => { 
+            if (!vehicle?.available) return;
+            e?.stopPropagation(); 
+            onBookNow(vehicle); 
+          }}
+          disabled={!vehicle?.available}
+          className={`${vehicle?.available ? 'bg-cosmic-depth hover:bg-cosmic-depth/90' : 'bg-gray-400 cursor-not-allowed'} text-white text-xs py-2`}
         >
-          Book Now
+          {vehicle?.available ? 'Book Now' : 'Booked'}
         </Button>
       </div>
     </div>
