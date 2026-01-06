@@ -30,7 +30,7 @@ const FeaturedVehicles = () => {
   const featuredVehicles = useMemo(() => {
     console.log('Processing featured vehicles from:', vehicles);
     return vehicles
-      .filter(vehicle => vehicle.availability !== false) // Filter available vehicles
+      .filter(vehicle => vehicle.available !== false) // Filter available vehicles
       .sort((a, b) => {
         // Sort by price in descending order (highest first)
         const priceA = a.price || a.pricePerDay || 0;
@@ -47,7 +47,8 @@ const FeaturedVehicles = () => {
           category: vehicle.category || vehicle.type,
           price: vehicle.pricePerDay ?? vehicle.price ?? 0,
           image: vehicle.images?.[0] || vehicle.imageUrl || vehicle.image || '/assets/images/no_image.png',
-          availability: vehicle.status === 'available' ? "Available Now" : "",
+          available: vehicle.available,
+          availability: vehicle.available ? "Available Now" : "Details",
           seats: vehicle.seats ?? vehicle.passengers,
           fuelType: vehicle.fuelType,
           transmission: vehicle.transmission,
@@ -77,7 +78,7 @@ const FeaturedVehicles = () => {
       ...fullVehicle,
       pricePerDay: fullVehicle.price || fullVehicle.pricePerDay || vehicle.price,
       passengers: fullVehicle.seats || fullVehicle.passengers || vehicle.seats,
-      available: fullVehicle.availability !== false,
+      available: fullVehicle.available,
       images: fullVehicle.images || (fullVehicle.image ? [fullVehicle.image] : [vehicle.image]),
       type: fullVehicle.type || fullVehicle.category,
       year: fullVehicle.year
