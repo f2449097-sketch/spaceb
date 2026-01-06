@@ -73,7 +73,7 @@ const MpesaPay = () => {
             >
               Pay Now
             </Button>
-            <a href={`tel:${phone || '0733590901'}`}>
+            <a href={`tel:${phone || '0724440293'}`}>
               <Button variant="outline" iconName="Phone" className="border-cosmic-depth text-cosmic-depth hover:bg-cosmic-depth hover:text-white" asChild>
                 <span>Call Us</span>
               </Button>

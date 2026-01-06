@@ -20,7 +20,7 @@ const RecentBookings = () => {
       endDate: "2024-09-15",
       status: "pending-approval",
       amount: "KSH 48,000",
-      phone: "+254733590901",
+      phone: "+254724440293",
       email: "sarah.johnson@email.com"
     },
     {

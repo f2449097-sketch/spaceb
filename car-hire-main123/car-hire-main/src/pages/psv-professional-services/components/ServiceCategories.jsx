@@ -117,7 +117,7 @@ const ServiceCategories = () => {
                   
                   {/* Call Button */}
                   <a 
-                    href="tel:+254733590901"
+                    href="tel:+254724440293"
                     className="flex-1"
                   >
                     <Button

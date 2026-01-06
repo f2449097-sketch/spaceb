@@ -59,19 +59,19 @@ const HeroSection = () => {
         <div className="group relative">
              <div className="absolute -inset-1 bg-gradient-to-r from-stellar-gold to-yellow-500 rounded-full blur opacity-30 group-hover:opacity-60 transition duration-300"></div>
              <a 
-               href="tel:+254733590901"
+               href="tel:+254724440293"
                className="relative flex items-center gap-2 sm:gap-3 px-6 py-3 sm:px-8 sm:py-4 bg-stellar-gold hover:bg-yellow-500 text-cosmic-depth font-bold rounded-full shadow-xl transform hover:scale-105 transition-all duration-300 text-base sm:text-lg"
              >
                <Icon name="Phone" size={20} className="sm:w-6 sm:h-6" />
                <span>Call Now</span>
              </a>
         </div>
-
+ 
         {/* WhatsApp Button */}
         <div className="group relative">
            <div className="absolute -inset-1 bg-gradient-to-r from-green-400 to-green-600 rounded-full blur opacity-30 group-hover:opacity-60 transition duration-300"></div>
            <WhatsAppButton 
-             phoneNumber="+254733590901"
+             phoneNumber="+254724440293"
              className="relative px-6 py-3 sm:px-8 sm:py-4 bg-green-500 hover:bg-green-600 border-0 text-white text-base sm:text-lg font-semibold rounded-full shadow-xl transform hover:scale-105 transition-all duration-300 !mt-0 !w-auto"
            >
              Chat on WhatsApp

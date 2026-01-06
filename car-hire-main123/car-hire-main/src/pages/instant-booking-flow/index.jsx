@@ -220,7 +220,7 @@ const InstantBookingFlow = () => {
             <div className="grid grid-cols-2 gap-2">
               {/* WhatsApp */}
               <a 
-                href="https://wa.me/254733590901?text=Hi, I just made a reservation and need assistance."
+                href="https://wa.me/254724440293?text=Hi, I just made a reservation and need assistance."
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -235,7 +235,7 @@ const InstantBookingFlow = () => {
               </a>
               
               {/* Call */}
-              <a href="tel:+254733590901">
+              <a href="tel:+254724440293">
                 <div className="bg-blue-600 hover:bg-blue-700 rounded-lg p-2 transition-all hover:scale-105 cursor-pointer shadow-md">
                   <div className="flex items-center justify-center gap-2 text-white">
                     <Icon name="Phone" className="w-4 h-4" />

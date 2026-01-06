@@ -163,7 +163,7 @@ const ServiceDiscovery = () => {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
               <a
-                href="tel:+25424440293"
+                href="tel:+254724440293"
                 className="w-full sm:w-auto"
               >
                 <Button
@@ -174,13 +174,13 @@ const ServiceDiscovery = () => {
                 >
                   <span className="flex items-center justify-center gap-2">
                     <Icon name="PhoneCall" size={20} />
-                    <span>Call +254 244 40293</span>
+                    <span>Call +254 724 440293</span>
                   </span>
                 </Button>
               </a>
               <div className="w-full sm:w-auto">
                 <WhatsAppButton 
-                  phoneNumber="+25424440293"
+                  phoneNumber="+254724440293"
                   message="Hi, I'm interested in your custom mobility solutions."
                   className="w-full py-3 px-6"
                 />

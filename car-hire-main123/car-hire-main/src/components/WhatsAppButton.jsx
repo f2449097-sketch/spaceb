@@ -2,7 +2,7 @@ import React from 'react';
 import Button from './ui/Button';
 import formatWhatsAppLink from '../utils/formatWhatsAppLink';
 
-const WhatsAppButton = ({ phoneNumber, children, className, type = 'message' }) => {
+const WhatsAppButton = ({ phoneNumber = '+254724440293', children, className, type = 'message' }) => {
   const whatsappUrl = formatWhatsAppLink(phoneNumber, type);
 
   const handleClick = () => {
