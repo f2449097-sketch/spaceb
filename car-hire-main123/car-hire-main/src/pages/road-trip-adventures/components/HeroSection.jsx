@@ -52,6 +52,8 @@ const HeroSection = () => {
                 <img
                   src={slide?.image}
                   alt={slide?.title}
+                  loading="eager"
+                  fetchpriority="high"
                   className="w-full h-full object-cover"
                 />
               </picture>
