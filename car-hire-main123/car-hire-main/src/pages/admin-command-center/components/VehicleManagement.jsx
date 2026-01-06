@@ -6,9 +6,8 @@ import Image from '../../../components/AppImage';
 
 const VehicleManagement = () => {
   const navigate = useNavigate();
-  const { vehicles, deleteVehicle, toggleAvailability } = useVehicles();
+  const { vehicles, deleteVehicle } = useVehicles();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(null);
-  const [togglingAvailability, setTogglingAvailability] = useState(null);
 
   const handleAddVehicle = () => {
     navigate('/admin-command-center/add-vehicle');
@@ -20,19 +19,7 @@ const VehicleManagement = () => {
 
   const handleDeleteVehicle = (id) => {
     deleteVehicle(id);
-    setShowDeleteConfirm(null);
-  };
-
-  const handleToggleAvailability = async (id, currentAvailability) => {
-    setTogglingAvailability(id);
-    try {
-      await toggleAvailability(id, !currentAvailability);
-    } catch (error) {
-      console.error('Failed to toggle availability:', error);
-      alert('Failed to update vehicle availability: ' + error.message);
-    } finally {
-      setTogglingAvailability(null);
-    }
+     setShowDeleteConfirm(null);
   };
 
   return (

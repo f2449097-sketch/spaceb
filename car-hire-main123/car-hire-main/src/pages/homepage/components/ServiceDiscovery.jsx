@@ -79,12 +79,12 @@ const ServiceDiscovery = () => {
           </p>
         </div>
 
-        <div className="overflow-x-auto sm:overflow-x-visible">
-          <div className="flex gap-4 sm:grid sm:grid-cols-3 sm:gap-4 max-w-5xl mx-auto px-4 sm:px-6 pb-4 sm:pb-0">
+        <div className="overflow-x-auto sm:overflow-x-visible pb-4 sm:pb-0 snap-x snap-mandatory scrollbar-hide">
+          <div className="flex gap-4 sm:grid sm:grid-cols-3 sm:gap-4 max-w-5xl mx-auto px-4 sm:px-6">
             {services?.map((service, index) => (
               <div
                 key={service?.id}
-                className="group relative bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex-shrink-0 w-80 sm:w-auto"
+                className="group relative bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex-shrink-0 w-80 sm:w-auto snap-center"
               >
               {/* Image Section */}
               {patterns[service?.pattern]}

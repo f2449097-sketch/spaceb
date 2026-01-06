@@ -52,31 +52,32 @@ const FleetShowcase = () => {
         </div>
         
         {/* Fleet-style Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4">
+        <div className="flex overflow-x-auto snap-x snap-mandatory gap-3 pb-4 sm:grid sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 sm:gap-4 sm:pb-0 scrollbar-hide">
           {loading ? (
-            <div className="col-span-full text-center py-8">
+            <div className="col-span-full text-center py-8 w-full">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cosmic-depth mx-auto mb-4"></div>
               <p className="text-text-refined">Loading luxury vehicles...</p>
             </div>
           ) : vehicles?.length > 0 ? (
             vehicles.map((vehicle) => (
-              <VehicleCard
-                key={vehicle?._id || vehicle?.id}
-                vehicle={{
-                  ...vehicle,
-                  // Ensure compatibility with VehicleCard props
-                  pricePerDay: vehicle?.price || vehicle?.pricePerDay,
-                  passengers: vehicle?.specifications?.seats || vehicle?.passengers,
-                  available: vehicle?.available !== false, // Default to available if not specified
-                  class: vehicle?.category || vehicle?.class || 'Luxury',
-                  images: vehicle?.images || [vehicle?.image] || ['/assets/images/no_image.png']
-                }}
-                onViewDetails={handleViewDetails}
-                onBookNow={handleBookNow}
-              />
+              <div key={vehicle?._id || vehicle?.id} className="min-w-[85vw] sm:min-w-0 snap-center flex-shrink-0">
+                <VehicleCard
+                  vehicle={{
+                    ...vehicle,
+                    // Ensure compatibility with VehicleCard props
+                    pricePerDay: vehicle?.price || vehicle?.pricePerDay,
+                    passengers: vehicle?.specifications?.seats || vehicle?.passengers,
+                    available: vehicle?.available !== false, // Default to available if not specified
+                    class: vehicle?.category || vehicle?.class || 'Luxury',
+                    images: vehicle?.images || [vehicle?.image] || ['/assets/images/no_image.png']
+                  }}
+                  onViewDetails={handleViewDetails}
+                  onBookNow={handleBookNow}
+                />
+              </div>
             ))
           ) : (
-            <div className="col-span-full text-center py-8">
+            <div className="col-span-full text-center py-8 w-full">
               <Icon name="Car" size={48} className="text-cosmic-silver mx-auto mb-4" />
               <p className="text-text-refined">No luxury vehicles available at the moment.</p>
             </div>
