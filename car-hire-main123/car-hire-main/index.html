@@ -14,6 +14,12 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preconnect" href="https://res.cloudinary.com" />
+  
+  {/* Preload critical hero images for mobile performance */}
+  <link rel="preload" as="image" href="/assets/images/audi.jpg" media="(max-width: 768px)" />
+  <link rel="preload" as="image" href="/assets/images/luxury.jpg" media="(max-width: 768px)" />
+  <link rel="preload" as="image" href="/images/benz.jpg" media="(min-width: 769px)" />
+
   <link rel="icon" href="/images/space_logo.gpeg.jpg" />
   <link rel="manifest" href="/manifest.json" />
 </head>

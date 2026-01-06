@@ -14,6 +14,8 @@ const HeroSection = () => {
           <img
             src="/assets/images/luxury.jpg"
             alt="PSV Mercedes Benz executive transportation"
+            loading="eager"
+            fetchpriority="high"
             className="w-full h-full object-cover"
             onError={(e) => {
               console.log('Benz image failed to load, using fallback');
