@@ -26,6 +26,29 @@ const SwipeNavigation = () => {
   const minSwipeDistance = 70;
 
   const handleTouchStart = useCallback((e) => {
+    // Check if the touch is within a horizontally scrollable container
+    let element = e.target;
+    let isScrollable = false;
+
+    while (element && element !== document.body) {
+      // Check if element has horizontal scroll capability
+      if (element.scrollWidth > element.clientWidth) {
+        const style = window.getComputedStyle(element);
+        const overflowX = style.getPropertyValue('overflow-x');
+        
+        if (overflowX === 'auto' || overflowX === 'scroll') {
+          isScrollable = true;
+          break;
+        }
+      }
+      element = element.parentElement;
+    }
+
+    if (isScrollable) {
+      setTouchStart(null); // Ignore this swipe
+      return;
+    }
+
     setTouchStart(e.targetTouches[0].clientX);
   }, []);
 

@@ -132,7 +132,7 @@ const FeaturedVehicles = () => {
         </div>
 
         {/* Vehicles Carousel */}
-        <div className="relative overflow-x-auto lg:overflow-hidden -mx-6 lg:mx-0 snap-x snap-mandatory scroll-smooth">
+        <div className="relative overflow-x-auto lg:overflow-hidden -mx-6 lg:mx-0 snap-x snap-mandatory scroll-smooth scrollbar-hide">
           <div 
             className="flex gap-0 lg:gap-0 lg:brand-transition lg:duration-500 lg:ease-in-out pb-4 lg:pb-0 px-0"
             style={{ transform: isDesktop ? `translateX(-${currentIndex * (100 / itemsPerView)}%)` : 'none' }}
