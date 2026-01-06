@@ -45,7 +45,7 @@ const VehicleCard = ({ vehicle, onViewDetails, onBookNow }) => {
       onClick={() => onViewDetails(vehicle)}
     >
       {/* Image */}
-      <div className="relative h-40 overflow-hidden">
+      <div className="aspect-video w-full overflow-hidden relative bg-gray-200">
         <Image
           src={vehicle?.images?.[currentImageIndex]}
           alt={`${vehicle?.make} ${vehicle?.model}`}

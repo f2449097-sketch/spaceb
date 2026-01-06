@@ -108,36 +108,38 @@ const FeaturedVehicles = () => {
             </p>
           </div>
           
-          <div className="hidden lg:flex items-center space-x-4">
-            <Button
-              variant="outline"
-              size="sm"
-              iconName="ChevronLeft"
-              onClick={prevSlide}
-              disabled={currentIndex === 0}
-              className="w-12 h-12 rounded-full border-cosmic-depth text-cosmic-depth hover:bg-cosmic-depth hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
-            />
-            <Button
-              variant="outline"
-              size="sm"
-              iconName="ChevronRight"
-              onClick={nextSlide}
-              disabled={currentIndex === maxIndex}
-              className="w-12 h-12 rounded-full border-cosmic-depth text-cosmic-depth hover:bg-cosmic-depth hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
-            />
-          </div>
+          {isDesktop && (
+            <div className="hidden lg:flex items-center space-x-4">
+              <Button
+                variant="outline"
+                size="sm"
+                iconName="ChevronLeft"
+                onClick={prevSlide}
+                disabled={currentIndex === 0}
+                className="w-12 h-12 rounded-full border-cosmic-depth text-cosmic-depth hover:bg-cosmic-depth hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+              />
+              <Button
+                variant="outline"
+                size="sm"
+                iconName="ChevronRight"
+                onClick={nextSlide}
+                disabled={currentIndex === maxIndex}
+                className="w-12 h-12 rounded-full border-cosmic-depth text-cosmic-depth hover:bg-cosmic-depth hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+              />
+            </div>
+          )}
         </div>
 
         {/* Vehicles Carousel */}
-        <div className="relative overflow-x-auto lg:overflow-hidden">
+        <div className="relative overflow-x-auto lg:overflow-hidden -mx-6 lg:mx-0 snap-x snap-mandatory scroll-smooth">
           <div 
-            className="flex gap-4 lg:gap-0 lg:brand-transition lg:duration-500 lg:ease-in-out pb-4 lg:pb-0"
+            className="flex gap-0 lg:gap-0 lg:brand-transition lg:duration-500 lg:ease-in-out pb-4 lg:pb-0 px-0"
             style={{ transform: isDesktop ? `translateX(-${currentIndex * (100 / itemsPerView)}%)` : 'none' }}
           >
             {featuredVehicles?.map((vehicle) => (
               <div
                 key={vehicle?.id}
-                className="w-72 lg:w-80 xl:w-1/3 flex-shrink-0 lg:px-3"
+                className="w-full lg:w-80 xl:w-1/3 flex-shrink-0 px-6 lg:px-3 snap-center"
               >
                 <div 
                   onClick={() => handleViewDetails(vehicle)}

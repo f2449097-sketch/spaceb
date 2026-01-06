@@ -44,11 +44,17 @@ const HeroSection = () => {
             }`}
           >
             <div className="relative w-full h-full overflow-hidden">
-              <Image
-                src={slide?.image}
-                alt={slide?.title}
-                className="w-full h-full object-cover"
-              />
+              <picture>
+                <source 
+                  media="(max-width: 768px)" 
+                  srcSet="/assets/images/adventure.jpg" 
+                />
+                <img
+                  src={slide?.image}
+                  alt={slide?.title}
+                  className="w-full h-full object-cover"
+                />
+              </picture>
               <div className="absolute inset-0 bg-gradient-to-r from-cosmic-depth/80 via-cosmic-depth/40 to-transparent" />
             </div>
           </div>
@@ -57,7 +63,7 @@ const HeroSection = () => {
       {/* Content Overlay */}
       <div className="absolute inset-0 flex flex-col">
         {/* Title - Higher Position */}
-        <div className="flex-1 flex items-center justify-start pt-32">
+        <div className="flex-1 flex items-start justify-start pt-32">
           <div className="w-full max-w-7xl mx-auto px-6 lg:px-8">
             <div className="max-w-2xl">
               <h1 className="text-5xl lg:text-7xl font-bold text-white leading-tight">

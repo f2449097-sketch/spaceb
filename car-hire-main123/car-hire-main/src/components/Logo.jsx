@@ -5,7 +5,7 @@ const Logo = ({ className }) => {
     <img
       src="/images/space_logo.gpeg.jpg"
       alt="SpaceBorne Logo"
-      className={`w-10 h-10 object-contain ${className || ''}`}
+      className={`w-12 h-12 object-contain ${className || ''}`}
     />
   );
 };

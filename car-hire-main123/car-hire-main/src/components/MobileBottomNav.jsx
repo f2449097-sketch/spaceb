@@ -26,7 +26,7 @@ const MobileBottomNav = () => {
           <Link
             key={item.path}
             to={item.path}
-            className={`flex flex-col items-center justify-center p-2 rounded-lg min-w-[60px] min-h-[60px] brand-transition ${
+            className={`flex flex-col items-center justify-center p-2 rounded-lg min-w-[70px] min-h-[70px] brand-transition ${
               item.label === 'Book'
                 ? 'bg-adventure-orange text-white shadow-lg'
                 : isActivePath(item.path)
@@ -36,7 +36,7 @@ const MobileBottomNav = () => {
           >
             <Icon 
               name={item.icon} 
-              size={20} 
+              size={24} 
               strokeWidth={2}
               className={item.label === 'Book' ? 'text-white' : ''}
             />

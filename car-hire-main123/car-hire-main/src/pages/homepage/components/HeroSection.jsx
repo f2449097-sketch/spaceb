@@ -7,12 +7,18 @@ const HeroSection = () => {
   return (
     <section className="relative min-h-screen overflow-hidden bg-cosmic-depth flex items-center justify-center">
       {/* Background Image - clear and visible */}
-      <div className="absolute inset-0 z-0">
-        <img
-          src="/images/benz.jpg"
-          alt="Premium mobility experience"
-          className="w-full h-full object-cover rounded-3xl shadow-2xl"
-        />
+      <div className="absolute inset-0 z-0 bg-[url('/assets/images/audi.jpg')] bg-cover bg-center bg-no-repeat md:bg-none">
+        <picture>
+          <source 
+            media="(max-width: 768px)" 
+            srcSet="/assets/images/audi.jpg" 
+          />
+          <img
+            src="/images/benz.jpg"
+            alt="Premium mobility experience"
+            className="hero-image w-full h-full object-contain md:object-cover rounded-3xl shadow-2xl"
+          />
+        </picture>
         <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/5 to-transparent rounded-3xl" />
       </div>
 

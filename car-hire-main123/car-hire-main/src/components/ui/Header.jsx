@@ -54,7 +54,7 @@ const Header = () => {
       className={`fixed top-0 left-0 right-0 z-40 brand-transition header-mobile ${
         isScrolled 
           ? 'bg-white/98 backdrop-blur-xl shadow-lg border-b border-gray-200' 
-          : 'bg-white/95 backdrop-blur-lg shadow-md border-b border-gray-100'
+          : 'bg-transparent shadow-none border-none'
       }`}
     >
       <div className="h-safe-area w-full bg-inherit" />
@@ -143,7 +143,7 @@ const Header = () => {
         
         {/* Mobile Horizontal Navigation - Just below logo as requested */}
         {!isAdminPage && (
-          <div className="lg:hidden w-full overflow-x-auto scrollbar-none border-t border-gray-100 bg-white backdrop-blur-sm">
+          <div className="lg:hidden w-full overflow-x-auto scrollbar-none border-t border-white/10 bg-transparent backdrop-blur-sm">
             <div className="flex items-center px-3 py-2.5 gap-2.5 min-w-max pr-6">
               {navigationItems?.filter(item => item.label !== 'Book Now').map((item) => (
                 <Link

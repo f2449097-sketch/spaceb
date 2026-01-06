@@ -1,7 +1,7 @@
 /* Import mobile optimizations */
 @import './mobile.css';
 /* Import simple scaling for universal layout */
-@import './universal-layout.css';
+/* universal-layout.css removed to restore responsiveness */
 
 /* Base styles */
 * {
@@ -31,5 +31,19 @@ body {
     line-height: 1.5;
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* Hero Image Mobile Fix - Prevent cropping on mobile */
+.hero-image {
+  transition: object-fit 0.3s ease, object-position 0.3s ease;
+}
+
+/* Mobile: Show full image width, no cropping */
+/* Mobile: Show full image width, no cropping */
+@media (max-width: 768px) {
+  .hero-image {
+    /* Ensure it covers the screen even on mobile */
+    min-height: 100vh;
   }
 }
