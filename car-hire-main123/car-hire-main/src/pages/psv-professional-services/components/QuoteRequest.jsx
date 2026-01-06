@@ -169,7 +169,7 @@ const QuoteRequest = () => {
             </h2>
             
             <p className="text-xl text-text-refined mb-8 leading-relaxed">
-              Receive an instant estimate for your professional transportation needs. 
+              Receive an instant estimate for your PSV transportation needs. 
               Our intelligent pricing system considers all your requirements to provide 
               accurate, competitive quotes.
             </p>

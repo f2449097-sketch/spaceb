@@ -170,7 +170,7 @@ const BookingCapabilities = () => {
           </h2>
           
           <p className="text-xl text-text-refined max-w-3xl mx-auto leading-relaxed">
-            Experience the future of professional transportation booking with our advanced 
+            Experience the future of PSV transportation booking with our advanced 
             real-time system that ensures perfect coordination between fleet, drivers, and service delivery.
           </p>
         </div>
@@ -244,7 +244,7 @@ const BookingCapabilities = () => {
               { step: 2, title: "Real-Time Check", description: "Instant availability and pricing confirmation", icon: "Search" },
               { step: 3, title: "Driver Assignment", description: "Automatic matching with qualified drivers", icon: "User" },
               { step: 4, title: "Confirmation", description: "Comprehensive booking details and timeline", icon: "CheckCircle" },
-              { step: 5, title: "Service Delivery", description: "Professional execution with live tracking", icon: "Car" }
+              { step: 5, title: "Service Delivery", description: "PSV execution with live tracking", icon: "Car" }
             ]?.map((step, index) => (
               <div key={index} className="text-center relative">
                 {/* Step Number */}

@@ -16,7 +16,7 @@ const CustomerStories = () => {
       testimonial: `SpaceBorne made our family vacation to the Kenyan coast absolutely magical. From the pristine beaches of Diani to the historic Lamu Island, every moment was perfectly planned. The luxury vehicle and PSV service exceeded our expectations.`,
       experience: "5-day Coastal Journey",
       date: "December 2024",
-      highlights: ["Luxury SUV", "Beach resorts", "Swahili culture tour", "Professional guide"]
+      highlights: ["Luxury SUV", "Beach resorts", "Swahili culture tour", "PSV guide"]
     },
     {
       id: 2,
@@ -49,7 +49,7 @@ const CustomerStories = () => {
       location: "Nairobi, Kenya",
       service: "Executive Transport",
       rating: 5,
-      testimonial: `SpaceBorne's executive service is exceptional. Always punctual, professional drivers, and immaculate vehicles. Their understanding of Nairobi traffic and routes saves me valuable time for important business meetings.`,
+      testimonial: `SpaceBorne's executive service is exceptional. Always punctual, PSV drivers, and immaculate vehicles. Their understanding of Nairobi traffic and routes saves me valuable time for important business meetings.`,
       experience: "Monthly Executive Service",
       date: "Ongoing since June 2024",
       highlights: ["Mercedes S-Class", "Priority booking", "24/7 support", "Corporate rates"]
