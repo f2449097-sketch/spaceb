@@ -11,7 +11,7 @@ const CaseStudies = () => {
       challenge: "Annual conference transportation for 500+ attendees across multiple venues",
       solution: "Coordinated fleet of 15 vehicles with dedicated route management and real-time tracking",
       results: ["100% on-time performance", "Zero incidents", "95% satisfaction rating", "20% cost savings"],
-      testimonial: "SpaceBorne's professional service exceeded our expectations. The coordination was flawless, and our executives were impressed with the quality of service.",
+      testimonial: "SpaceBorne's PSV service exceeded our expectations. The coordination was flawless, and our executives were impressed with the quality of service.",
       author: "Sarah Johnson",
       position: "VP of Operations",
       image: "https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg",
