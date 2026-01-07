@@ -20,6 +20,7 @@ const AdminCommandCenter = React.lazy(() => import('./pages/admin-command-center
 const AddVehicle = React.lazy(() => import('./pages/admin-command-center/components/AddVehicle'));
 const EditVehicle = React.lazy(() => import('./pages/admin-command-center/components/EditVehicle'));
 const NotFound = React.lazy(() => import('./pages/NotFound'));
+const ExamplePage = React.lazy(() => import('./components/responsive/ExamplePage'));
 
 const Routes = () => {
   return (
@@ -44,6 +45,7 @@ const Routes = () => {
             <Route path="/booking-success" element={<BookingSuccess />} />
             <Route path="/mpesa-pay" element={<MpesaPay />} />
             <Route path="/customer-registration" element={<CustomerRegistration />} />
+            <Route path="/responsive-demo" element={<ExamplePage />} />
             
             {/* Admin Routes */}
             <Route path="/admin-login" element={<AdminLogin />} />

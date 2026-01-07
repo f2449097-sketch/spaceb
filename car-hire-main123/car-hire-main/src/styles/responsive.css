@@ -1,0 +1,264 @@
+/* 
+  Responsive Design System CSS
+  This file should be imported AFTER Tailwind in your main CSS file
+  Do NOT use @layer utilities here since it's a separate file
+*/
+
+/* 1. CSS Variables for Responsive Design */
+:root {
+  /* Fluid Typography Variables */
+  --min-font-size: 16px;
+  --max-font-size: 22px;
+  --min-screen-width: 320px;
+  --max-screen-width: 1920px;
+
+  /* Spacing Scale (works alongside Tailwind) */
+  --space-unit: 0.25rem;
+  --space-xs: calc(var(--space-unit) * 1);
+  --space-sm: calc(var(--space-unit) * 2);
+  --space-md: calc(var(--space-unit) * 4);
+  --space-lg: calc(var(--space-unit) * 8);
+  --space-xl: calc(var(--space-unit) * 16);
+
+  /* Container Widths */
+  --container-sm: 540px;
+  --container-md: 720px;
+  --container-lg: 960px;
+  --container-xl: 1140px;
+  --container-xxl: 1320px;
+
+  /* Responsive Gutters */
+  --gutter: clamp(1rem, 2vw, 2rem);
+
+  /* Mobile height fix */
+  --vh: 1vh;
+}
+
+/* 2. Reset/Base Styles (complementary to Tailwind) */
+.responsive-base {
+  box-sizing: border-box;
+}
+
+/* 3. Container System */
+.responsive-container {
+  width: 100%;
+  padding-right: var(--gutter);
+  padding-left: var(--gutter);
+  margin-right: auto;
+  margin-left: auto;
+}
+
+@media (min-width: 576px) {
+  .responsive-container {
+    max-width: var(--container-sm);
+  }
+}
+
+@media (min-width: 768px) {
+  .responsive-container {
+    max-width: var(--container-md);
+  }
+}
+
+@media (min-width: 992px) {
+  .responsive-container {
+    max-width: var(--container-lg);
+  }
+}
+
+@media (min-width: 1200px) {
+  .responsive-container {
+    max-width: var(--container-xl);
+  }
+}
+
+@media (min-width: 1400px) {
+  .responsive-container {
+    max-width: var(--container-xxl);
+  }
+}
+
+.responsive-container-fluid {
+  width: 100%;
+  padding-right: var(--gutter);
+  padding-left: var(--gutter);
+  margin-right: auto;
+  margin-left: auto;
+}
+
+/* 4. Fluid Grid System */
+.responsive-grid {
+  display: grid;
+  gap: var(--gutter);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+}
+
+/* Grid Columns */
+.responsive-grid-cols-1 {
+  grid-template-columns: repeat(1, 1fr);
+}
+
+.responsive-grid-cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.responsive-grid-cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.responsive-grid-cols-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* Responsive Grid Variants */
+@media (max-width: 767px) {
+  .responsive-grid-sm-1 {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .responsive-grid-sm-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .responsive-grid-md-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .responsive-grid-md-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 992px) {
+  .responsive-grid-lg-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .responsive-grid-lg-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* 5. Flexbox Utilities */
+.responsive-flex {
+  display: flex;
+  gap: var(--gutter);
+}
+
+.responsive-flex-row {
+  flex-direction: row;
+}
+
+.responsive-flex-col {
+  flex-direction: column;
+}
+
+@media (max-width: 767px) {
+  .responsive-flex-sm-col {
+    flex-direction: column;
+  }
+}
+
+/* 6. Fluid Typography */
+.fluid-text-base {
+  font-size: clamp(16px,
+      calc(16px + (18 - 16) * ((100vw - 320px) / (1920 - 320))),
+      18px);
+  line-height: 1.6;
+}
+
+.fluid-heading-1 {
+  font-size: clamp(32px,
+      calc(32px + (60 - 32) * ((100vw - 320px) / (1920 - 320))),
+      60px);
+  line-height: 1.2;
+}
+
+.fluid-heading-2 {
+  font-size: clamp(28px,
+      calc(28px + (48 - 28) * ((100vw - 320px) / (1920 - 320))),
+      48px);
+  line-height: 1.3;
+}
+
+.fluid-heading-3 {
+  font-size: clamp(24px,
+      calc(24px + (36 - 24) * ((100vw - 320px) / (1920 - 320))),
+      36px);
+  line-height: 1.4;
+}
+
+/* 7. Responsive Media */
+.responsive-img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.aspect-ratio {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.25%;
+}
+
+.aspect-ratio>* {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.aspect-1-1 {
+  padding-bottom: 100%;
+}
+
+.aspect-4-3 {
+  padding-bottom: 75%;
+}
+
+.aspect-16-9 {
+  padding-bottom: 56.25%;
+}
+
+/* 8. Spacing Utilities */
+.responsive-mt-2 {
+  margin-top: calc(var(--space-unit) * 2);
+}
+
+.responsive-mt-4 {
+  margin-top: calc(var(--space-unit) * 4);
+}
+
+.responsive-p-4 {
+  padding: calc(var(--space-unit) * 4);
+}
+
+/* 13. Performance & Mobile Optimizations */
+@media (max-width: 767px) {
+
+  /* Touch-friendly minimum sizes */
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Prevent mobile zoom on inputs */
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="number"],
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* Mobile height fix */
+.mobile-height-fix {
+  height: calc(var(--vh, 1vh) * 100);
+}
