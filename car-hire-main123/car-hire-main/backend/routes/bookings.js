@@ -3,6 +3,7 @@ const router = express.Router();
 const Booking = require('../models/Booking');
 const Message = require('../models/Message');
 const authMiddleware = require('../middleware/auth');
+const { notifyNewCarBooking } = require('../services/whatsapp');
 
 router.use((req, res, next) => {
     console.log(`Bookings Route: ${req.method} ${req.originalUrl}`);
@@ -72,6 +73,14 @@ router.post('/', async (req, res) => {
         } catch (e) {
             console.warn('Failed to create dashboard message for booking:', e.message);
         }
+
+        // Send WhatsApp notification
+        try {
+            await notifyNewCarBooking(booking);
+        } catch (waErr) {
+            console.error('WhatsApp notification failed:', waErr);
+        }
+
         res.status(201).json({
             success: true,
             message: 'Booking created successfully!',

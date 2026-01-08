@@ -54,7 +54,7 @@ const FleetShowcase = () => {
         
         {/* Fleet-style Horizontal Scroll / Grid */}
         <div className="relative overflow-x-auto lg:overflow-hidden -mx-6 lg:mx-0 snap-x snap-mandatory scroll-smooth scrollbar-hide">
-          <div className="flex gap-0 lg:gap-0 pb-4 lg:pb-0 px-0 sm:grid sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 sm:gap-4">
+          <div className="flex gap-0 lg:gap-0 pb-4 lg:pb-0 px-0 sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
             {loading ? (
               <div className="col-span-full text-center py-8 w-full">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cosmic-depth mx-auto mb-4"></div>
@@ -76,10 +76,10 @@ const FleetShowcase = () => {
                 };
 
                 return (
-                  <div key={mappedVehicle.id} className="w-full sm:w-auto flex-shrink-0 px-6 lg:px-3 snap-center">
+                  <div key={mappedVehicle.id} className="w-full sm:w-auto flex-shrink-0 px-6 lg:px-0 snap-center">
                     <div 
                       onClick={() => handleViewDetails(vehicle)}
-                      className="bg-surface-premium rounded-xl lg:rounded-2xl overflow-hidden premium-shadow hover:deep-shadow brand-transition group cursor-pointer"
+                      className="bg-surface-premium rounded-xl lg:rounded-2xl overflow-hidden premium-shadow hover:deep-shadow brand-transition group cursor-pointer h-full"
                     >
                       {/* Availability Badge */}
                       <div className="absolute top-4 right-4 z-10">
@@ -90,7 +90,7 @@ const FleetShowcase = () => {
                       </div>
 
                       {/* Vehicle Image */}
-                      <div className="relative h-48 lg:h-56 overflow-hidden">
+                      <div className="relative h-48 lg:h-64 overflow-hidden">
                         <Image
                           src={mappedVehicle.image}
                           alt={`${mappedVehicle.make} ${mappedVehicle.model}`}

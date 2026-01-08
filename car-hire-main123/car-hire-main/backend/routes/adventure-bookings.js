@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const AdventureBooking = require('../models/AdventureBooking');
 const Adventure = require('../models/Adventure');
+const { notifyNewAdventureBooking } = require('../services/whatsapp');
 
 router.use((req, res, next) => {
     console.log(`Adventure Bookings Route: ${req.method} ${req.originalUrl}`);
@@ -59,6 +60,13 @@ router.post('/', async (req, res) => {
         });
 
         await booking.save();
+
+        // Send WhatsApp notification
+        try {
+            await notifyNewAdventureBooking(booking);
+        } catch (waErr) {
+            console.error('WhatsApp notification failed:', waErr);
+        }
 
         res.status(201).json({
             success: true,
