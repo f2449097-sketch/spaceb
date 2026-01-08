@@ -41,6 +41,7 @@
     "tailwindcss-animate": "^1.0.7",
     "tailwindcss-elevation": "^2.0.0",
     "tailwindcss-fluid-type": "^2.0.7",
+    "twilio": "^5.11.2",
     "xss": "^1.0.15"
   },
   "scripts": {
