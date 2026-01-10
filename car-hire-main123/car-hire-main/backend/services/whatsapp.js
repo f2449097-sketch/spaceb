@@ -68,6 +68,7 @@ SpaceBorne Car Hire Admin`;
  * @param {object} booking - Adventure booking data
  */
 const notifyNewAdventureBooking = async (booking) => {
+    console.log('Formatting WhatsApp message for adventure:', booking.adventureTitle);
     const message = `🌍 *New Adventure Booking Alert!*
 
 👤 *Customer:* ${booking.firstName} ${booking.lastName}
@@ -83,6 +84,7 @@ const notifyNewAdventureBooking = async (booking) => {
 
 SpaceBorne Car Hire Admin`;
     
+    console.log('Sending WhatsApp message...');
     return sendWhatsApp(message);
 };
 

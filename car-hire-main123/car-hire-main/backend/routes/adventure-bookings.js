@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const AdventureBooking = require('../models/AdventureBooking');
 const Adventure = require('../models/Adventure');
+const Message = require('../models/Message');
 const { notifyNewAdventureBooking } = require('../services/whatsapp');
 
 router.use((req, res, next) => {
@@ -60,9 +61,28 @@ router.post('/', async (req, res) => {
         });
 
         await booking.save();
+        console.log('Adventure booking saved successfully:', booking._id);
+
+        // Persist a dashboard message for admin (matching car bookings)
+        try {
+            const msg = new Message({
+                firstName,
+                lastName,
+                phoneNumber,
+                email,
+                idNumber: req.body.idNumber,
+                status: 'new',
+                content: `New adventure booking: ${req.body.adventureTitle || 'Unknown Adventure'}`
+            });
+            await msg.save();
+            console.log('Dashboard message created for adventure booking');
+        } catch (e) {
+            console.warn('Failed to create dashboard message for adventure booking:', e.message);
+        }
 
         // Send WhatsApp notification
         try {
+            console.log('Attempting to send WhatsApp notification for adventure booking...');
             await notifyNewAdventureBooking(booking);
         } catch (waErr) {
             console.error('WhatsApp notification failed:', waErr);
