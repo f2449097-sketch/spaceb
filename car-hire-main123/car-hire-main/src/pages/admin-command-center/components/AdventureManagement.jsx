@@ -129,132 +129,70 @@ const AdventureManagement = () => {
     
     try {
       const token = getAdminToken();
-      
-      // Prepare form data for submission
-      let submitData;
+      let response;
       let headers = {
         'Authorization': `Bearer ${token}`
       };
+      let body;
 
       if (imageInputType === 'upload' && selectedFile) {
-        // Check if backend supports file uploads by trying FormData first
-        try {
-          // Use FormData for file upload
-          submitData = new FormData();
-          
-          // Add all form fields to FormData
-          submitData.append('title', formData.title);
-          submitData.append('description', formData.description);
-          submitData.append('location', formData.location);
-          submitData.append('duration', formData.duration);
-          submitData.append('difficulty', formData.difficulty);
-          submitData.append('price', parseFloat(formData.price) || 0);
-          submitData.append('maxParticipants', parseInt(formData.maxParticipants) || 0);
-          submitData.append('bestTime', formData.bestTime);
-          
-          // Handle arrays
-          const highlights = formData.highlights.split(',').map(h => h.trim()).filter(h => h);
-          const included = formData.included.split(',').map(i => i.trim()).filter(i => i);
-          
-          submitData.append('highlights', JSON.stringify(highlights));
-          submitData.append('included', JSON.stringify(included));
-          
-          // Add the file
-          submitData.append('image', selectedFile);
-          
-          // Don't set Content-Type header for FormData (browser will set it with boundary)
-        } catch (formDataError) {
-          console.warn('FormData creation failed, falling back to URL method:', formDataError);
-          // Fallback to URL method if FormData fails
-          const adventureData = {
-            ...formData,
-            price: parseFloat(formData.price) || 0,
-            maxParticipants: parseInt(formData.maxParticipants) || 0,
-            highlights: formData.highlights.split(',').map(h => h.trim()).filter(h => h),
-            included: formData.included.split(',').map(i => i.trim()).filter(i => i),
-            image: '/images/savannah.jpg' // Default fallback image
-          };
-          
-          submitData = JSON.stringify(adventureData);
-          headers['Content-Type'] = 'application/json';
-          
-          alert('Note: File upload not supported yet. Using default image. Please use URL option for custom images.');
-        }
+        // Use FormData for file upload
+        const formDataObj = new FormData();
+        formDataObj.append('title', formData.title);
+        formDataObj.append('description', formData.description);
+        formDataObj.append('location', formData.location);
+        formDataObj.append('duration', formData.duration);
+        formDataObj.append('difficulty', formData.difficulty);
+        formDataObj.append('price', formData.price);
+        formDataObj.append('maxParticipants', formData.maxParticipants);
+        formDataObj.append('bestTime', formData.bestTime);
+        formDataObj.append('highlights', JSON.stringify(formData.highlights.split(',').map(h => h.trim()).filter(Boolean)));
+        formDataObj.append('included', JSON.stringify(formData.included.split(',').map(i => i.trim()).filter(Boolean)));
+        formDataObj.append('image', selectedFile);
+        
+        body = formDataObj;
+        // Do NOT set Content-Type for FormData
       } else {
-        // Use JSON for URL-based image
+        // Use JSON for URL-based image or no new image
         const adventureData = {
           ...formData,
           price: parseFloat(formData.price) || 0,
           maxParticipants: parseInt(formData.maxParticipants) || 0,
-          highlights: formData.highlights.split(',').map(h => h.trim()).filter(h => h),
-          included: formData.included.split(',').map(i => i.trim()).filter(i => i)
+          highlights: formData.highlights.split(',').map(h => h.trim()).filter(Boolean),
+          included: formData.included.split(',').map(i => i.trim()).filter(Boolean)
         };
         
-        submitData = JSON.stringify(adventureData);
+        body = JSON.stringify(adventureData);
         headers['Content-Type'] = 'application/json';
       }
 
-      let response;
-      if (editingAdventure) {
-        // Update existing adventure
-        response = await fetch(`${API_BASE_URL}/adventures/${editingAdventure._id}`, {
-          method: 'PUT',
-          headers,
-          body: submitData
-        });
-      } else {
-        // Add new adventure
-        response = await fetch(`${API_BASE_URL}/adventures`, {
-          method: 'POST',
-          headers,
-          body: submitData
-        });
-      }
+      const url = editingAdventure 
+        ? `${API_BASE_URL}/adventures/${editingAdventure._id}`
+        : `${API_BASE_URL}/adventures`;
+      
+      const method = editingAdventure ? 'PUT' : 'POST';
+
+      response = await fetch(url, {
+        method,
+        headers,
+        body
+      });
 
       if (response.ok) {
         setShowSuccess(true);
         setTimeout(() => setShowSuccess(false), 3000);
-        fetchAdventures(); // Refresh the list
+        fetchAdventures();
         setShowAddForm(false);
         setEditingAdventure(null);
         resetForm();
       } else {
-        let errorMessage = 'Unknown error occurred';
-        try {
-          const errorData = await response.json();
-          errorMessage = errorData.message || errorData.error || 'Server error';
-          console.error('API error:', errorData);
-        } catch (parseError) {
-          console.error('Error parsing response:', parseError);
-          errorMessage = `Server returned ${response.status}: ${response.statusText}`;
-        }
-        
-        // Provide specific error messages for common issues
-        if (response.status === 413) {
-          errorMessage = 'File too large. Please select a smaller image (max 5MB).';
-        } else if (response.status === 415) {
-          errorMessage = 'Unsupported file type. Please select a valid image file.';
-        } else if (response.status === 400) {
-          errorMessage = 'Invalid data provided. Please check all fields and try again.';
-        } else if (response.status === 401) {
-          errorMessage = 'Authentication failed. Please log in again.';
-        } else if (response.status === 403) {
-          errorMessage = 'Permission denied. You may not have access to perform this action.';
-        }
-        
+        const errorData = await response.json().catch(() => ({}));
+        const errorMessage = errorData.message || `Server error: ${response.status}`;
         alert('Failed to save adventure: ' + errorMessage);
       }
     } catch (error) {
       console.error('Error saving adventure:', error);
-      let errorMessage = 'Network error occurred. Please check your connection and try again.';
-      
-      if (error.name === 'TypeError' && error.message.includes('fetch')) {
-        errorMessage = 'Unable to connect to server. Please check your internet connection.';
-      } else if (error.message) {
-        errorMessage = error.message;
-      }
-      
-      alert('Failed to save adventure: ' + errorMessage);
+      alert('Failed to save adventure: ' + (error.message || 'Network error'));
     } finally {
       setLoading(false);
     }

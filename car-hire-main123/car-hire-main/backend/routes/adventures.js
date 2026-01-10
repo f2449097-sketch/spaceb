@@ -1,9 +1,12 @@
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
 const Adventure = require('../models/Adventure');
 const authMiddleware = require('../middleware/auth');
-const { cloudinary } = require('../config/cloudinary');
+const { storage, cloudinary } = require('../config/cloudinary');
 const mongoose = require('mongoose');
+
+const upload = multer({ storage: storage });
 
 // List all adventures
 router.get('/', async (req, res) => {
@@ -59,23 +62,73 @@ router.get('/:id', async (req, res) => {
 });
 
 // Create (admin only)
-router.post('/', authMiddleware, async (req, res) => {
+router.post('/', authMiddleware, upload.single('image'), async (req, res) => {
     try {
-        const adv = new Adventure(req.body);
+        const adventureData = { ...req.body };
+        
+        // Handle image from file upload
+        if (req.file) {
+            adventureData.image = req.file.path;
+        }
+
+        // Parse array fields if they come as strings (from FormData)
+        if (typeof adventureData.highlights === 'string') {
+            try {
+                adventureData.highlights = JSON.parse(adventureData.highlights);
+            } catch (e) {
+                adventureData.highlights = adventureData.highlights.split(',').map(s => s.trim()).filter(Boolean);
+            }
+        }
+        
+        if (typeof adventureData.included === 'string') {
+            try {
+                adventureData.included = JSON.parse(adventureData.included);
+            } catch (e) {
+                adventureData.included = adventureData.included.split(',').map(s => s.trim()).filter(Boolean);
+            }
+        }
+
+        const adv = new Adventure(adventureData);
         await adv.save();
         res.status(201).json({ success: true, adventure: adv });
     } catch (e) {
+        console.error('Error creating adventure:', e);
         res.status(400).json({ success: false, message: e.message });
     }
 });
 
 // Update (admin only)
-router.put('/:id', authMiddleware, async (req, res) => {
+router.put('/:id', authMiddleware, upload.single('image'), async (req, res) => {
     try {
-        const adv = await Adventure.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        const adventureData = { ...req.body };
+        
+        // Handle image from file upload
+        if (req.file) {
+            adventureData.image = req.file.path;
+        }
+
+        // Parse array fields if they come as strings (from FormData)
+        if (typeof adventureData.highlights === 'string') {
+            try {
+                adventureData.highlights = JSON.parse(adventureData.highlights);
+            } catch (e) {
+                adventureData.highlights = adventureData.highlights.split(',').map(s => s.trim()).filter(Boolean);
+            }
+        }
+        
+        if (typeof adventureData.included === 'string') {
+            try {
+                adventureData.included = JSON.parse(adventureData.included);
+            } catch (e) {
+                adventureData.included = adventureData.included.split(',').map(s => s.trim()).filter(Boolean);
+            }
+        }
+
+        const adv = await Adventure.findByIdAndUpdate(req.params.id, adventureData, { new: true });
         if (!adv) return res.status(404).json({ success: false, message: 'Not found' });
         res.json({ success: true, adventure: adv });
     } catch (e) {
+        console.error('Error updating adventure:', e);
         res.status(400).json({ success: false, message: e.message });
     }
 });
